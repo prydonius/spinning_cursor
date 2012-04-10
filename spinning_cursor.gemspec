@@ -5,30 +5,36 @@
 
 Gem::Specification.new do |s|
   s.name = "spinning_cursor"
-  s.version = "0.1.0.rc1"
+  s.version = "0.1.0"
 
-  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Adnan Abdulhussein"]
   s.date = "2012-04-10"
-  s.description = "Spinning Cursor is a tiny library that allows you to easily produce a\nwaiting/loading message for your Ruby command line program."
+  s.description = "Spinning Cursor is a flexible DSL that allows you to easily produce a customizable waiting/loading message for your Ruby command line program. Beautifully keep your users informed with what your program is doing when a more complex solution, such as a progress bar, doesn't fit your needs."
   s.email = "adnan@prydoni.us"
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.rdoc"
+    "README.md",
+    "TODO"
   ]
   s.files = [
     ".document",
+    ".yardopts",
+    "CHANGELOG",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
+    "TODO",
     "VERSION",
     "lib/spinning_cursor.rb",
     "lib/spinning_cursor/cursor.rb",
     "lib/spinning_cursor/parser.rb",
+    "spinning_cursor.gemspec",
     "test/helper.rb",
     "test/test_cursors.rb",
+    "test/test_exceptions.rb",
     "test/test_parser.rb",
     "test/test_spinning_cursor.rb"
   ]
@@ -36,27 +42,33 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.21"
-  s.summary = "A loader for command line tools in Ruby."
+  s.summary = "A DSL for adding animated loaders to your Ruby command line application."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<shoulda>, [">= 0"])
-      s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_development_dependency(%q<bundler>, ["~> 1.1.3"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
+      s.add_development_dependency(%q<yard>, [">= 0"])
+      s.add_development_dependency(%q<redcarpet>, [">= 0"])
+      s.add_development_dependency(%q<github-markup>, [">= 0"])
     else
       s.add_dependency(%q<shoulda>, [">= 0"])
-      s.add_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_dependency(%q<bundler>, ["~> 1.1.3"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
+      s.add_dependency(%q<yard>, [">= 0"])
+      s.add_dependency(%q<redcarpet>, [">= 0"])
+      s.add_dependency(%q<github-markup>, [">= 0"])
     end
   else
     s.add_dependency(%q<shoulda>, [">= 0"])
-    s.add_dependency(%q<rdoc>, ["~> 3.12"])
     s.add_dependency(%q<bundler>, ["~> 1.1.3"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
+    s.add_dependency(%q<yard>, [">= 0"])
+    s.add_dependency(%q<redcarpet>, [">= 0"])
+    s.add_dependency(%q<github-markup>, [">= 0"])
   end
 end
 

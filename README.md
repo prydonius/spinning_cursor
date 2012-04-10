@@ -15,7 +15,7 @@ you with a _sexy_ DSL for easy use of the library.
 As easy as RubyGems:
 
 ```
-$ gem install spinning_cursor --pre
+$ gem install spinning_cursor
 ```
 
 ## Usage
