@@ -1,10 +1,11 @@
 module SpinningCursor
   if RUBY_PLATFORM =~ /(win|w)32$/
+    # DOS
     # Contains a string to clear the line in the shell
     CLR = "                                                               \r"
-    # Haven't yet found a good solution for Windows...
   else
     # Unix
+    # Contains a string to clear the line in the shell
     CLR = "\e[0K"
   end
 
@@ -19,15 +20,27 @@ module SpinningCursor
   # This class contains the cursor types (and their helper methods)
   #
   class Cursor
+    attr_accessor :banner
+
     #
-    # Start the printing
+    # As of v0.1.0: only initializes the cursor class, use the print
+    # method to start the printing. Takes only the banner argument as
+    # a result of this.
     #
-    def initialize(type = :spinner, banner = "Loading")
+    def initialize(banner = "Loading")
       @banner = banner
+    end
+
+    #
+    # Takes a cursor type symbol and starts the printing
+    #
+    def spin(type = :spinner)
       $stdout.sync = true
       print @banner
       send type
     end
+
+    private
 
     #
     # Prints three dots and clears the line

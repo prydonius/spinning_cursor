@@ -1,0 +1,18 @@
+CHANGELOG
+===============================================================================
+
+v0.1.0 (2012-04-10)
+  - First non-pre release
+  - Exceptions in the task cause the cursor to stop and the exception is shown
+  - Added the ability to change the banner message in the task block, allowing
+    you to update the user on the ongoing task.
+  - Returns a hash containing the start, finish and elapsed times
+
+v0.1.0.rc1 (2012-04-09)
+  - Initial release
+  - Features:
+    - A sexy DSL
+    - Set the loading message, type of spinner and finished message
+    - Pass in an action block to do the whole start stop loop, or don't and
+      call stop yourself
+    - Change the finish message within your task block

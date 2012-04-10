@@ -5,7 +5,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
     should "reset line after printing three dots" do
       capture_stdout do |out|
         dots = Thread.new do
-          SpinningCursor::Cursor.new :dots, ""
+          SpinningCursor::Cursor.new("").spin :dots
         end
         sleep 5
         dots.kill
@@ -20,7 +20,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
     should "cycle through correctly" do
       capture_stdout do |out|
         spinner = Thread.new do
-          SpinningCursor::Cursor.new :spinner, ""
+          SpinningCursor::Cursor.new("").spin :spinner
         end
         sleep 0.1
         assert_equal "|", out.string

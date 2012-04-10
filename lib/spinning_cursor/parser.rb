@@ -41,6 +41,8 @@ module SpinningCursor
       end
     end
 
+    private
+
     #
     # Pass any other methods to the calling class
     #

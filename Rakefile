@@ -17,9 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "spinning_cursor"
   gem.homepage = "http://github.com/Prydonius/spinning_cursor"
   gem.license = "MIT"
-  gem.summary = "A loader for command line tools in Ruby."
-  gem.description = "Spinning Cursor is a tiny library that allows you to easily produce a
-waiting/loading message for your Ruby command line program."
+  gem.summary = "A DSL for adding animated loaders to your Ruby command line application."
+  gem.description = "Spinning Cursor is a flexible DSL that allows you to easily produce a customizable waiting/loading message for your Ruby command line program. Beautifully keep your users informed with what your program is doing when a more complex solution, such as a progress bar, doesn't fit your needs."
   gem.email = "adnan@prydoni.us"
   gem.authors = ["Adnan Abdulhussein"]
   # dependencies defined in Gemfile
@@ -34,16 +33,3 @@ Rake::TestTask.new(:test) do |test|
 end
 
 task :default => :test
-
-require 'rdoc/task'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "spinning_cursor #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('LICENSE*')
-  rdoc.rdoc_files.include('VERSION')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-  rdoc.main = "README.rdoc"
-end

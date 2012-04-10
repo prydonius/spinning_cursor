@@ -82,5 +82,22 @@ class TestSpinningCursor < Test::Unit::TestCase
         assert_equal true, (out.string.end_with? "Done\n")
       end
     end
+
+    should "allow you to change the banner" do
+      capture_stdout do |out|
+        SpinningCursor.start do
+          action do
+            # Have to give it time to print the banners
+            sleep 0.1
+            assert_equal true, (out.string.include? "Loading")
+            sleep 0.1
+            SpinningCursor.set_banner "Finishing up"
+            sleep 0.5
+            assert_equal true, (out.string.include? "Finishing up")
+            sleep 0.1
+          end
+        end
+      end
+    end
   end
 end
