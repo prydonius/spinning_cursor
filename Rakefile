@@ -17,8 +17,9 @@ Jeweler::Tasks.new do |gem|
   gem.name = "spinning_cursor"
   gem.homepage = "http://github.com/Prydonius/spinning_cursor"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = "A loader for command line tools in Ruby."
+  gem.description = "Spinning Cursor is a tiny library that allows you to easily produce a
+waiting/loading message for your Ruby command line program."
   gem.email = "adnan@prydoni.us"
   gem.authors = ["Adnan Abdulhussein"]
   # dependencies defined in Gemfile
@@ -32,14 +33,6 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
-end
-
 task :default => :test
 
 require 'rdoc/task'
@@ -50,4 +43,5 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title = "spinning_cursor #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
+  rdoc.main = "README.rdoc"
 end
