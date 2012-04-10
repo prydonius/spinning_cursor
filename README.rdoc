@@ -1,8 +1,8 @@
 == Spinning Cursor
 
 Spinning Cursor is a tiny library that allows you to easily produce a
-waiting/loading message for your Ruby command line program, when
-a more complex solution, such as a progress bar, doesn't fit your needs.
+waiting/loading message for your Ruby command line program, when a more
+complex solution, such as a progress bar, doesn't fit your needs.
 
 Inspired by Chris Wanstrath's Choice[http://https://github.com/defunkt/choice],
 Spinning Cursor provides you with a DSL for easy use of the library.
@@ -11,7 +11,7 @@ Spinning Cursor provides you with a DSL for easy use of the library.
 
 As easy as RubyGems:
 
-  $ gem install spinning_cursor
+  $ gem install spinning_cursor --pre
 
 == Usage
 

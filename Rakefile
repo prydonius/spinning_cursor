@@ -42,6 +42,8 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "spinning_cursor #{version}"
   rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('LICENSE*')
+  rdoc.rdoc_files.include('VERSION')
   rdoc.rdoc_files.include('lib/**/*.rb')
   rdoc.main = "README.rdoc"
 end
