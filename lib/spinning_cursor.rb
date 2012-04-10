@@ -23,8 +23,14 @@ module SpinningCursor
     if @@parsed.action.nil?
       return
     end
-    @@parsed.originator.instance_eval &@@parsed.action
-    stop
+    # The action
+    begin
+      @@parsed.originator.instance_eval &@@parsed.action
+    rescue
+      set_message "Task failed..."
+    ensure
+      stop
+    end
   end
 
   #

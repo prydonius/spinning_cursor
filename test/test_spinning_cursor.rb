@@ -54,5 +54,33 @@ class TestSpinningCursor < Test::Unit::TestCase
         assert_equal true, (out.string.end_with? "Failed!\n")
       end
     end
+
+    should "stop and display error if an unmanaged exception is thrown" do
+      capture_stdout do |out|
+        SpinningCursor.start do
+          action do
+            raise "An exception!"
+          end
+        end
+
+        assert_equal true, (out.string.end_with? "Task failed...\n")
+      end
+    end
+
+    should "not stop if an exception is handled" do
+      capture_stdout do |out|
+        SpinningCursor.start do
+          action do
+            begin
+              raise "An exception!"
+            rescue
+              # rescued!
+            end
+          end
+        end
+
+        assert_equal true, (out.string.end_with? "Done\n")
+      end
+    end
   end
 end
