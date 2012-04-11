@@ -51,9 +51,9 @@ It's as easy as that!
 ### Options
 
 * `banner` - This displays before the cursor. Defaults to "Loading".
-* `type` - The type of spinner (currently only `:dots` and `:spinner`).
+* `type` - The type of cursor (currently only `:dots` and `:spinner`).
   Defaults to `:spinner`.
-* `action` - The stuff you want to do whilst the spinner is spinning.
+* `action` - The stuff you want to do whilst the cursor is spinning.
 * `message` - The message you want to show the user once the task is finished.
   Defaults to "Done".
 
@@ -111,7 +111,7 @@ You get the message. (see what I did there?)
 
 ### I need to change the banner message during the task
 
-Yay! All you need is the new version of the gem (v1.0.1) and you can change
+Yay! All you need is the new version of the gem (v0.1.0) and you can change
 the banner message in the same way you would the finish message, using
 `set_banner`:
 
