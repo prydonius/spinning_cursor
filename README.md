@@ -7,7 +7,7 @@ Beautifully keep your users informed with what your program is doing when a
 more complex solution, such as a progress bar, doesn't fit your needs.
 
 Inspired by Chris Wanstrath's
-[Choice](http://https://github.com/defunkt/choice), Spinning Cursor provides
+[Choice](https://github.com/defunkt/choice), Spinning Cursor provides
 you with a _sexy_ DSL for easy use of the library.
 
 ## Installation

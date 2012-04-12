@@ -20,15 +20,14 @@ module SpinningCursor
     @@cursor = Cursor.new(@@parsed.banner nil)
     @@curs = Thread.new { @@cursor.spin(@@parsed.type nil) }
 
-    # Time the execution
-    @@start = Time.now
-
     if @@parsed.action.nil?
       return
     end
     # The action
     begin
-      @@parsed.originator.instance_eval &@@parsed.action
+      @@start, @@finish, @@elapsed = do_exec_time do
+        @@parsed.originator.instance_eval &@@parsed.action
+      end
     rescue
       set_message "Task failed..."
     ensure
@@ -42,9 +41,6 @@ module SpinningCursor
   #
   def stop
     begin
-      @@end = Time.now
-      @@elapsed = @@end - @@start
-
       @@curs.kill
       reset_line
       puts (@@parsed.message nil)
@@ -97,11 +93,26 @@ module SpinningCursor
   #
   def get_exec_time
     begin
-      return { :started => @@start, :finished => @@end,
+      return { :started => @@start, :finished => @@finish,
         :elapsed => @@elapsed }
     rescue NameError
       raise NoTaskError.new "An execution hasn't started or finished."
     end
+  end
+
+  private
+
+  #
+  # Takes a block, and returns the benchmarked realtime, and the start
+  # and finish times.
+  #
+  def do_exec_time
+    start = Time.now
+    yield
+    finish = Time.now
+    elapsed = finish - start
+
+    return start, finish, elapsed
   end
 
   class NoTaskError < Exception ; end
