@@ -1,1 +1,5 @@
 Suppress output and show later?
+deal with returns?
+test changes to spinning cursor, check diff for changes
+refactor tests to use minitest
+setup travis ci to test across different versions of ruby

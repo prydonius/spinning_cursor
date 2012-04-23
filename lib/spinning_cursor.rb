@@ -10,23 +10,25 @@ module SpinningCursor
   # thread if an action block is passed.
   #
   def start(&block)
-    if defined? @@curs
-      if @@curs.alive?
+    if defined? @curs
+      if @curs.alive?
         stop
       end
     end
 
-    @@parsed = Parser.new(block)
-    @@cursor = Cursor.new(@@parsed.banner nil)
-    @@curs = Thread.new { @@cursor.spin(@@parsed.type nil) }
+    @parsed = Parser.new(block)
+    @cursor = Cursor.new(@parsed.banner nil)
+    @curs = Thread.new { @cursor.spin(@parsed.type nil) }
 
-    if @@parsed.action.nil?
+    if @parsed.action.nil?
+      # record start time
+      do_exec_time
       return
     end
     # The action
     begin
-      @@start, @@finish, @@elapsed = do_exec_time do
-        @@parsed.originator.instance_eval &@@parsed.action
+      do_exec_time do
+        @parsed.originator.instance_eval &@parsed.action
       end
     rescue
       set_message "Task failed..."
@@ -41,9 +43,12 @@ module SpinningCursor
   #
   def stop
     begin
-      @@curs.kill
+      @curs.kill
+      # Set cursor to nil so set_message and set_banner methods only work
+      # when cursor is actually running.
+      # @cursor = nil
       reset_line
-      puts (@@parsed.message nil)
+      puts (@parsed.message nil)
 
       # Return execution time
       get_exec_time
@@ -56,10 +61,10 @@ module SpinningCursor
   # Determines whether the cursor thread is still running
   #
   def alive?
-    if not defined? @@curs
+    if not defined? @curs
       return false
     else
-      @@curs.alive?
+      @curs.alive?
     end
   end
 
@@ -69,7 +74,7 @@ module SpinningCursor
   #
   def set_message(msg)
     begin
-      @@parsed.message msg
+      @parsed.message msg
     rescue NameError
       raise CursorNotRunning.new "Cursor isn't running... are you sure " +
         "you're calling this from an action block?"
@@ -81,7 +86,7 @@ module SpinningCursor
   #
   def set_banner(banner)
     begin
-      @@cursor.banner = banner
+      @cursor.banner = banner
     rescue NameError
       raise CursorNotRunning.new "Cursor isn't running... are you sure " +
         "you're calling this from an action block?"
@@ -92,27 +97,33 @@ module SpinningCursor
   # Retrieves execution time information
   #
   def get_exec_time
-    begin
-      return { :started => @@start, :finished => @@finish,
-        :elapsed => @@elapsed }
-    rescue NameError
+    if not @start.nil?
+      if @finish.nil? && @curs.alive? == false
+        do_exec_time
+      end
+      return { :started => @start, :finished => @finish,
+        :elapsed => @elapsed }
+    else
       raise NoTaskError.new "An execution hasn't started or finished."
     end
   end
 
-  private
 
   #
-  # Takes a block, and returns the benchmarked realtime, and the start
-  # and finish times.
+  # Takes a block, and returns the start, finish and elapsed times
   #
   def do_exec_time
-    start = Time.now
-    yield
-    finish = Time.now
-    elapsed = finish - start
-
-    return start, finish, elapsed
+    if @curs.alive?
+      @start = Time.now
+      if block_given?
+        yield
+        @finish = Time.now
+        @elapsed = @finish - @start
+      end
+    else
+      @finish = Time.now
+      @elapsed = @finish - @start
+    end
   end
 
   class NoTaskError < Exception ; end
