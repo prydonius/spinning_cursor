@@ -1,6 +1,12 @@
 CHANGELOG
 ===============================================================================
 
+v0.1.1 - v0.1.2 (2012-04-25)
+  - Task timing is more concentrated (times, yields, works out the difference)
+  - Trying to set the message/banner after a task has finished raises an
+    exception
+  - Exceptions are showing now (promise this time D;)
+
 v0.1.0 (2012-04-10)
   - First non-pre release
   - Exceptions in the task cause the cursor to stop and the exception is shown
