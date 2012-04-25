@@ -44,11 +44,14 @@ module SpinningCursor
   def stop
     begin
       @curs.kill
-      # Set cursor to nil so set_message and set_banner methods only work
+      # Set cursor to nil so set_banner method only works
       # when cursor is actually running.
-      # @cursor = nil
+      @cursor = nil
       reset_line
       puts (@parsed.message nil)
+      # Set parsed to nil so set_message method only works
+      # when cursor is actually running.
+      @parsed = nil
 
       # Return execution time
       get_exec_time
@@ -108,6 +111,7 @@ module SpinningCursor
     end
   end
 
+  private
 
   #
   # Takes a block, and returns the start, finish and elapsed times

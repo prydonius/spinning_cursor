@@ -23,7 +23,7 @@ module SpinningCursor
     attr_accessor :banner
 
     #
-    # As of v0.1.0: only initializes the cursor class, use the print
+    # As of v0.1.0: only initializes the cursor class, use the spin
     # method to start the printing. Takes only the banner argument as
     # a result of this.
     #
