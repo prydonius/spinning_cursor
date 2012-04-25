@@ -10,7 +10,7 @@ module SpinningCursor
   # thread if an action block is passed.
   #
   def start(&block)
-    if defined? @curs
+    if not @curs.nil?
       if @curs.alive?
         stop
       end
@@ -30,8 +30,8 @@ module SpinningCursor
       do_exec_time do
         @parsed.originator.instance_eval &@parsed.action
       end
-    rescue
-      set_message "Task failed..."
+    rescue Exception => e
+      set_message "#{e.message}\n#{e.backtrace.join("\n")}"
     ensure
       return stop
     end
@@ -44,6 +44,8 @@ module SpinningCursor
   def stop
     begin
       @curs.kill
+      # Wait for the cursor to die -- can cause problems otherwise
+      while @curs.alive? ; end
       # Set cursor to nil so set_banner method only works
       # when cursor is actually running.
       @cursor = nil
@@ -64,7 +66,7 @@ module SpinningCursor
   # Determines whether the cursor thread is still running
   #
   def alive?
-    if not defined? @curs
+    if @curs.nil?
       return false
     else
       @curs.alive?

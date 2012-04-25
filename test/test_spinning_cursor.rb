@@ -9,7 +9,6 @@ class TestSpinningCursor < Test::Unit::TestCase
           action { sleep 1 }
         end
         # Give it some time to abort
-        sleep 0.1
         assert_equal false, SpinningCursor.alive?
       end
     end
@@ -63,7 +62,7 @@ class TestSpinningCursor < Test::Unit::TestCase
           end
         end
 
-        assert_equal true, (out.string.end_with? "Task failed...\n")
+        assert_equal true, (out.string.include? "An exception!")
       end
     end
 
