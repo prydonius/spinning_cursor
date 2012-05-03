@@ -1,4 +1,5 @@
-Suppress output and show later?
+Suppress output and show later? (give option to produce log file, or just print it to the screen after it's finished),
+  default to hide though.
 deal with returns?
 test changes to spinning cursor, check diff for changes
 refactor tests to use minitest
