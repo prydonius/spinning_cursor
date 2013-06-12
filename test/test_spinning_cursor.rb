@@ -99,4 +99,46 @@ class TestSpinningCursor < Test::Unit::TestCase
       end
     end
   end
+
+  context "when running for the second time" do
+    should "(without a block) return similar timing values" do
+      capture_stdout do |out|
+        SpinningCursor.start
+        sleep 1.5
+        result = SpinningCursor.stop
+        timing_1 = result[:finished] - result[:started]
+
+        SpinningCursor.start
+        sleep 1.5
+        result = SpinningCursor.stop
+        timing_2 = result[:finished] - result[:started]
+
+        assert_equal timing_1.round, timing_2.round,
+        "t1 #{timing_1} and t2 #{timing_2} should be equal"
+      end
+    end
+
+    should "(with a block) return similar timing values" do
+      capture_stdout do |out|
+        result =
+        SpinningCursor.start do
+          action do
+            sleep 1.5
+          end
+        end
+        timing_1 = result[:finished] - result[:started]
+
+        result =
+        SpinningCursor.start do
+          action do
+            sleep 1.5
+          end
+        end
+        timing_2 = result[:finished] - result[:started]
+
+        assert_equal timing_1.round, timing_2.round,
+        "t1 #{timing_1} and t2 #{timing_2} should be equal"
+      end
+    end
+  end
 end
