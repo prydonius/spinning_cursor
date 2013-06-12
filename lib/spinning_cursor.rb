@@ -19,6 +19,7 @@ module SpinningCursor
     @parsed = Parser.new(block)
     @cursor = Cursor.new(@parsed.banner nil)
     @curs = Thread.new { @cursor.spin(@parsed.type nil) }
+    @start = @finish = @elapsed = nil
 
     if @parsed.action.nil?
       # record start time
