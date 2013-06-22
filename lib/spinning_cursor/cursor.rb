@@ -32,12 +32,12 @@ module SpinningCursor
     end
 
     #
-    # Takes a cursor type symbol and starts the printing
+    # Takes a cursor type symbol and delay, and starts the printing
     #
-    def spin(type = :spinner)
+    def spin(type = :spinner, delay = nil)
       $stdout.sync = true
       print @banner
-      send type
+      if delay.nil? then send type else send type, delay end
     end
 
     private
@@ -45,10 +45,10 @@ module SpinningCursor
     #
     # Prints three dots and clears the line
     #
-    def dots
+    def dots(delay = 1)
       i = 1
       loop do
-        sleep 1
+        sleep delay
         if i % 4 == 0
           SpinningCursor.reset_line @banner
           i += 1
@@ -62,13 +62,13 @@ module SpinningCursor
     #
     # Cycles through '|', '/', '-', '\', resembling a spinning cursor
     #
-    def spinner
+    def spinner(delay = 0.5)
       spinners = ['|', '/', '-', '\\']
       i = 0
       loop do
         print " " unless @banner.empty?
         print spinners[i % 4]
-        sleep 0.5
+        sleep delay
         SpinningCursor.reset_line @banner
         i += 1
       end

@@ -11,7 +11,7 @@ class TestSpinningCursorParser < Test::Unit::TestCase
     end
   end
 
-  context "banner, type, message and action methods" do
+  context "banner, type, message, delay and action methods" do
     setup do
       @parser = SpinningCursor::Parser.new Proc.new { }
     end
@@ -25,6 +25,9 @@ class TestSpinningCursorParser < Test::Unit::TestCase
 
       @parser.message "a message"
       assert_equal "a message", (@parser.message nil)
+
+      @parser.delay 5
+      assert_equal 5, (@parser.delay nil)
 
       proc = Proc.new { }
       @parser.action &proc

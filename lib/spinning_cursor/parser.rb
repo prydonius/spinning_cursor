@@ -6,9 +6,10 @@ module SpinningCursor
     # Parses proc
     #
     def initialize(proc)
-      @banner = "Loading"
-      @type = :spinner
+      @banner  = "Loading"
+      @type    = :spinner
       @message = "Done"
+      @delay   = nil
 
       if not proc.nil?
         # Store the originating class for use in method_missing
@@ -33,11 +34,11 @@ module SpinningCursor
     # attributes.
     # Note:: for getting, pass nil e.g. <tt>banner nil</tt>
     #
-    %w[banner type message].each do |method|
-      define_method(method) do |string|
+    %w[banner type message delay].each do |method|
+      define_method(method) do |arg|
         var = "@#{method}"
-        return instance_variable_get(var) if string.nil?
-        instance_variable_set(var, string)
+        return instance_variable_get(var) if arg.nil?
+        instance_variable_set(var, arg)
       end
     end
 
