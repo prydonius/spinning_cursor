@@ -7,8 +7,8 @@ source "http://rubygems.org"
 # Include everything needed to run rake, tests, features, etc.
 group :development do
   gem "shoulda", ">= 0"
-  gem "bundler", "~> 1.1.3"
-  gem "jeweler", "~> 1.8.3"
+  gem "bundler", "~> 1.3.5"
+  gem "jeweler", "~> 1.8.4"
   gem "yard"
   gem "redcarpet"
   gem "github-markup"
