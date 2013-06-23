@@ -18,16 +18,16 @@ class TestSpinningCursorParser < Test::Unit::TestCase
 
     should "act as getters and setters" do
       @parser.banner "a new banner"
-      assert_equal "a new banner", (@parser.banner nil)
+      assert_equal "a new banner", @parser.banner
 
       @parser.type :dots
-      assert_equal :dots, (@parser.type nil)
+      assert_equal :dots, @parser.type
 
       @parser.message "a message"
-      assert_equal "a message", (@parser.message nil)
+      assert_equal "a message", @parser.message
 
       @parser.delay 5
-      assert_equal 5, (@parser.delay nil)
+      assert_equal 5, @parser.delay
 
       proc = Proc.new { }
       @parser.action &proc
