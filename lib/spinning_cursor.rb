@@ -96,7 +96,7 @@ module SpinningCursor
   # Retrieves execution time information
   #
   def get_exec_time
-    if not @start.nil?
+    if @start
       if @finish.nil? && @curs.alive? == false
         do_exec_time
       end
