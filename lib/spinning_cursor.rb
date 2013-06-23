@@ -64,10 +64,10 @@ module SpinningCursor
   # Determines whether the cursor thread is still running
   #
   def alive?
-    if @curs.nil?
-      false
-    else
+    if @curs
       @curs.alive?
+    else
+      false
     end
   end
 
