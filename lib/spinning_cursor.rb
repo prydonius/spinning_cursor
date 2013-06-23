@@ -17,11 +17,7 @@ module SpinningCursor
     @curs   = Thread.new { @cursor.spin(@parsed.type(nil), @parsed.delay(nil)) }
     @start  = @finish = @elapsed = nil
 
-    if @parsed.action.nil?
-      # record start time
-      do_exec_time
-      return
-    end
+    if @parsed.action
     # The action
     begin
       do_exec_time do
@@ -31,6 +27,12 @@ module SpinningCursor
       set_message "#{e.message}\n#{e.backtrace.join("\n")}"
     ensure
       return stop
+    end
+
+    else
+      # record start time
+      do_exec_time
+      return
     end
   end
 
