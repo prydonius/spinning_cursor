@@ -110,9 +110,7 @@ module SpinningCursor
   def do_exec_time
     if @curs.alive?
       @start = Time.now
-      if block_given?
-        yield
-      end
+      yield if block_given?
     end
     @finish = Time.now
     @elapsed = @finish - @start
