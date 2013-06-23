@@ -66,8 +66,6 @@ module SpinningCursor
   def alive?
     if @curs
       @curs.alive?
-    else
-      false
     end
   end
 
