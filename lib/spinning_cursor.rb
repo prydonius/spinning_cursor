@@ -10,7 +10,7 @@ module SpinningCursor
   # thread if an action block is passed.
   #
   def start(&block)
-    if not @curs.nil?
+    if @curs
       if @curs.alive?
         stop
       end
