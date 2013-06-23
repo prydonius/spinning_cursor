@@ -32,7 +32,6 @@ module SpinningCursor
     else
       # record start time
       do_exec_time
-      return
     end
   end
 
