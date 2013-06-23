@@ -43,7 +43,7 @@ module SpinningCursor
     begin
       @curs.kill
       # Wait for the cursor to die -- can cause problems otherwise
-      while @curs.alive? ; end
+      sleep(0.1) while @curs.alive?
       # Set cursor to nil so set_banner method only works
       # when cursor is actually running.
       @cursor = nil
