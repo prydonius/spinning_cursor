@@ -112,13 +112,10 @@ module SpinningCursor
       @start = Time.now
       if block_given?
         yield
-        @finish = Time.now
-        @elapsed = @finish - @start
       end
-    else
-      @finish = Time.now
-      @elapsed = @finish - @start
     end
+    @finish = Time.now
+    @elapsed = @finish - @start
   end
 
   class NoTaskError < Exception ; end
