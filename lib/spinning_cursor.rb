@@ -18,17 +18,16 @@ module SpinningCursor
     @start  = @finish = @elapsed = nil
 
     if @parsed.action
-    # The action
-    begin
-      do_exec_time do
-        @parsed.originator.instance_eval &@parsed.action
+      # The action
+      begin
+        do_exec_time do
+          @parsed.originator.instance_eval &@parsed.action
+        end
+      rescue Exception => e
+        set_message "#{e.message}\n#{e.backtrace.join("\n")}"
+      ensure
+        return stop
       end
-    rescue Exception => e
-      set_message "#{e.message}\n#{e.backtrace.join("\n")}"
-    ensure
-      return stop
-    end
-
     else
       # record start time
       do_exec_time
