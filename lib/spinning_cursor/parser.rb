@@ -11,7 +11,7 @@ module SpinningCursor
       @message = "Done"
       @delay   = nil
 
-      if not proc.nil?
+      if proc
         # Store the originating class for use in method_missing
         @originator = eval "self", proc.binding
         instance_eval &proc
