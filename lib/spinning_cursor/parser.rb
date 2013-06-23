@@ -24,7 +24,7 @@ module SpinningCursor
     # Getter and setter for the action block
     #
     def action(&block)
-      @action = block unless block.nil?
+      @action = block if block
 
       @action
     end
