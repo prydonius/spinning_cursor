@@ -97,7 +97,7 @@ module SpinningCursor
   #
   def get_exec_time
     raise NoTaskError.new "An execution hasn't started or finished." unless @start
-    if not @finish and not @curs.alive?
+    unless @finish or @curs.alive?
       do_exec_time
     end
     return { :started => @start, :finished => @finish,
