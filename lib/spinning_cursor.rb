@@ -10,22 +10,14 @@ module SpinningCursor
   # thread if an action block is passed.
   #
   def start(&block)
-    if not @curs.nil?
-      if @curs.alive?
-        stop
-      end
-    end
+    stop if alive?
 
     @parsed = Parser.new(block)
     @cursor = Cursor.new(@parsed.banner nil)
     @curs   = Thread.new { @cursor.spin(@parsed.type(nil), @parsed.delay(nil)) }
     @start  = @finish = @elapsed = nil
 
-    if @parsed.action.nil?
-      # record start time
-      do_exec_time
-      return
-    end
+    if @parsed.action
     # The action
     begin
       do_exec_time do
@@ -35,6 +27,11 @@ module SpinningCursor
       set_message "#{e.message}\n#{e.backtrace.join("\n")}"
     ensure
       return stop
+    end
+
+    else
+      # record start time
+      do_exec_time
     end
   end
 
@@ -46,7 +43,7 @@ module SpinningCursor
     begin
       @curs.kill
       # Wait for the cursor to die -- can cause problems otherwise
-      while @curs.alive? ; end
+      sleep(0.1) while @curs.alive?
       # Set cursor to nil so set_banner method only works
       # when cursor is actually running.
       @cursor = nil
@@ -67,11 +64,7 @@ module SpinningCursor
   # Determines whether the cursor thread is still running
   #
   def alive?
-    if @curs.nil?
-      return false
-    else
-      @curs.alive?
-    end
+    @curs and @curs.alive?
   end
 
   #
@@ -103,15 +96,10 @@ module SpinningCursor
   # Retrieves execution time information
   #
   def get_exec_time
-    if not @start.nil?
-      if @finish.nil? && @curs.alive? == false
-        do_exec_time
-      end
-      return { :started => @start, :finished => @finish,
-        :elapsed => @elapsed }
-    else
-      raise NoTaskError.new "An execution hasn't started or finished."
-    end
+    raise NoTaskError.new "An execution hasn't started or finished." unless @start
+    do_exec_time unless @finish or @curs.alive?
+    { :started => @start, :finished => @finish,
+      :elapsed => @elapsed }
   end
 
   private
@@ -122,15 +110,10 @@ module SpinningCursor
   def do_exec_time
     if @curs.alive?
       @start = Time.now
-      if block_given?
-        yield
-        @finish = Time.now
-        @elapsed = @finish - @start
-      end
-    else
-      @finish = Time.now
-      @elapsed = @finish - @start
+      yield if block_given?
     end
+    @finish = Time.now
+    @elapsed = @finish - @start
   end
 
   class NoTaskError < Exception ; end
