@@ -32,10 +32,12 @@ module SpinningCursor
     #
     # Getters and setters for +banner+, +type+ and +message+
     # attributes.
-    # Note:: for getting, pass nil e.g. <tt>banner nil</tt>
-    #
+    # Note:: for getting use method without arguments
+    #            e.g. <tt>banner</tt>
+    #        for setting use method with arguments
+    #            e.g. <tt>banner "my banner"</tt>.
     %w[banner type message delay].each do |method|
-      define_method(method) do |arg|
+      define_method(method) do |arg=nil|
         var = "@#{method}"
         return instance_variable_get(var) if arg.nil?
         instance_variable_set(var, arg)
