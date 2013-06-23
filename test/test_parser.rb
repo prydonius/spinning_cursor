@@ -7,7 +7,7 @@ class TestSpinningCursorParser < Test::Unit::TestCase
         "Banner"
       end
       parser = SpinningCursor::Parser.new Proc.new { banner banner_text }
-      assert_equal banner_text, (parser.banner nil)
+      assert_equal banner_text, parser.banner
     end
   end
 

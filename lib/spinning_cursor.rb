@@ -17,8 +17,8 @@ module SpinningCursor
     end
 
     @parsed = Parser.new(block)
-    @cursor = Cursor.new(@parsed.banner nil)
-    @curs   = Thread.new { @cursor.spin(@parsed.type(nil), @parsed.delay(nil)) }
+    @cursor = Cursor.new(@parsed.banner)
+    @curs   = Thread.new { @cursor.spin(@parsed.type, @parsed.delay) }
     @start  = @finish = @elapsed = nil
 
     if @parsed.action.nil?
@@ -51,7 +51,7 @@ module SpinningCursor
       # when cursor is actually running.
       @cursor = nil
       reset_line
-      puts (@parsed.message nil)
+      puts @parsed.message
       # Set parsed to nil so set_message method only works
       # when cursor is actually running.
       @parsed = nil
