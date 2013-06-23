@@ -10,10 +10,8 @@ module SpinningCursor
   # thread if an action block is passed.
   #
   def start(&block)
-    if @curs
-      if @curs.alive?
-        stop
-      end
+    if @curs and @curs.alive?
+      stop
     end
 
     @parsed = Parser.new(block)
