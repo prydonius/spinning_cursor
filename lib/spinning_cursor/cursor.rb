@@ -64,13 +64,11 @@ module SpinningCursor
     #
     def spinner(delay = 0.5)
       spinners = ['|', '/', '-', '\\']
-      i = 0
-      loop do
+      spinners.cycle do |spinner|
         print " " unless @banner.empty?
-        print spinners[i % 4]
+        print spinner
         sleep delay
         SpinningCursor.reset_line @banner
-        i += 1
       end
     end
   end
