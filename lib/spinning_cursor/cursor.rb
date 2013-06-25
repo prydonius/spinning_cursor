@@ -46,16 +46,12 @@ module SpinningCursor
     # Prints three dots and clears the line
     #
     def dots(delay = 1)
-      i = 1
-      loop do
+      dots = ['.', '..', '...', '']
+      dots.cycle do |dot|
+        print " " unless @banner.empty?
+        print dot
         sleep delay
-        if i % 4 == 0
-          SpinningCursor.reset_line @banner
-          i += 1
-          next
-        end
-        i += 1
-        print "."
+        SpinningCursor.reset_line @banner
       end
     end
 
