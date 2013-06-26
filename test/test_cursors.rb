@@ -23,9 +23,9 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
         end
         # slight delay to get things started
         sleep 0.1
-        assert_equal "", out.string
-        sleep 1
         assert_equal ".", out.string
+        sleep 1
+        assert_equal ".\r\e[0K..", out.string
         # don't need to go through the whole thing, otherwise test will take
         # too long
         dots.kill
