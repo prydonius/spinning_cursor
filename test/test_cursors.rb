@@ -37,7 +37,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
     should "cycle through correctly" do
       capture_stdout do |out|
         spinner = Thread.new do
-          SpinningCursor::Cursor.new("").spin :spinner
+          SpinningCursor::Cursor.new("").spin :spinner, 0.5
         end
         # slight delay to get things started
         sleep 0.1
