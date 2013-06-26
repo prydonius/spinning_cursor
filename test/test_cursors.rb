@@ -12,7 +12,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
         dots.kill
         # \r\e[0K is move cursor to the start of the line and clear line
         # in bash
-        assert_equal "...\r\e[0K", out.string
+        assert_equal ".\r\e[0K..\r\e[0K...\r\e[0K\r\e[0K.", out.string
       end
     end
 
