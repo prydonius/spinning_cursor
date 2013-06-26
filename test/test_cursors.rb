@@ -19,12 +19,12 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
     should "change 'frames' with correct delay" do
       capture_stdout do |out|
         dots = Thread.new do
-          SpinningCursor::Cursor.new("").spin :dots, 2
+          SpinningCursor::Cursor.new("").spin :dots, 1
         end
         # slight delay to get things started
         sleep 0.1
         assert_equal "", out.string
-        sleep 2
+        sleep 1
         assert_equal ".", out.string
         # don't need to go through the whole thing, otherwise test will take
         # too long
