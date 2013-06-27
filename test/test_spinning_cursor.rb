@@ -6,7 +6,7 @@ class TestSpinningCursor < Test::Unit::TestCase
       # Hide any output
       capture_stdout do |out|
         SpinningCursor.start do
-          action { sleep 1 }
+          action { sleep 0.1 }
         end
         # Give it some time to abort
         assert_equal false, SpinningCursor.alive?
@@ -31,7 +31,7 @@ class TestSpinningCursor < Test::Unit::TestCase
         SpinningCursor.start do
           banner "no action block"
         end
-        sleep 2
+        sleep 0.5
         assert_equal true, SpinningCursor.alive?
         SpinningCursor.stop
         sleep 0.1
@@ -85,13 +85,14 @@ class TestSpinningCursor < Test::Unit::TestCase
     should "allow you to change the banner" do
       capture_stdout do |out|
         SpinningCursor.start do
+          delay 0.2
           action do
             # Have to give it time to print the banners
             sleep 0.1
             assert_equal true, (out.string.include? "Loading")
             sleep 0.1
             SpinningCursor.set_banner "Finishing up"
-            sleep 0.5
+            sleep 0.2
             assert_equal true, (out.string.include? "Finishing up")
             sleep 0.1
           end
@@ -104,16 +105,16 @@ class TestSpinningCursor < Test::Unit::TestCase
     should "(without a block) return similar timing values" do
       capture_stdout do |out|
         SpinningCursor.start
-        sleep 1.5
+        sleep 0.2
         result = SpinningCursor.stop
         timing_1 = result[:finished] - result[:started]
 
         SpinningCursor.start
-        sleep 1.5
+        sleep 0.2
         result = SpinningCursor.stop
         timing_2 = result[:finished] - result[:started]
 
-        assert_equal timing_1.round, timing_2.round,
+        assert_equal (timing_1*10).round, (timing_2*10).round,
         "t1 #{timing_1} and t2 #{timing_2} should be equal"
       end
     end
@@ -123,7 +124,7 @@ class TestSpinningCursor < Test::Unit::TestCase
         result =
         SpinningCursor.start do
           action do
-            sleep 1.5
+            sleep 0.2
           end
         end
         timing_1 = result[:finished] - result[:started]
@@ -131,12 +132,12 @@ class TestSpinningCursor < Test::Unit::TestCase
         result =
         SpinningCursor.start do
           action do
-            sleep 1.5
+            sleep 0.2
           end
         end
         timing_2 = result[:finished] - result[:started]
 
-        assert_equal timing_1.round, timing_2.round,
+        assert_equal (timing_1*10).round, (timing_2*10).round,
         "t1 #{timing_1} and t2 #{timing_2} should be equal"
       end
     end

@@ -46,31 +46,22 @@ module SpinningCursor
     # Prints three dots and clears the line
     #
     def dots(delay = 1)
-      i = 1
-      loop do
-        sleep delay
-        if i % 4 == 0
-          SpinningCursor.reset_line @banner
-          i += 1
-          next
-        end
-        i += 1
-        print "."
-      end
+      cycle_through ['.', '..', '...', ''], delay
     end
 
     #
     # Cycles through '|', '/', '-', '\', resembling a spinning cursor
     #
     def spinner(delay = 0.5)
-      spinners = ['|', '/', '-', '\\']
-      i = 0
-      loop do
+      cycle_through ['|', '/', '-', '\\'], delay
+    end
+
+    def cycle_through(chars, delay)
+      chars.cycle do |char|
         print " " unless @banner.empty?
-        print spinners[i % 4]
+        print char
         sleep delay
         SpinningCursor.reset_line @banner
-        i += 1
       end
     end
   end
