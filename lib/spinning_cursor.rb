@@ -12,6 +12,8 @@ module SpinningCursor
   def start(&block)
     stop if alive?
 
+    capture_console
+
     @parsed = Parser.new(block)
     @cursor = Cursor.new(@parsed.banner)
     @curs   = Thread.new { @cursor.spin(@parsed.type, @parsed.delay) }
@@ -40,6 +42,8 @@ module SpinningCursor
   #
   def stop
     begin
+      release_console
+
       @curs.kill
       # Wait for the cursor to die -- can cause problems otherwise
       sleep(0.1) while @curs.alive?
