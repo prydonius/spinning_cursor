@@ -1,3 +1,5 @@
+require 'stringio'
+
 module SpinningCursor
   if RUBY_PLATFORM =~ /(win|w)32$/
     # DOS
@@ -14,6 +16,14 @@ module SpinningCursor
   #
   def reset_line(text = "")
     print "\r#{CLR}#{text}"
+  end
+
+  def capture_console
+    $stdout = StringIO.new
+  end
+
+  def release_console
+    $stdout = STDOUT
   end
 
   #
