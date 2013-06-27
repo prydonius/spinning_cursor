@@ -31,13 +31,24 @@ module SpinningCursor
       @banner = banner
     end
 
+    def hide_cursor
+      STDOUT.print "\e[?25l"
+    end
+
+    def show_cursor
+      STDOUT.print "\e[?25h"
+    end
+
     #
     # Takes a cursor type symbol and delay, and starts the printing
     #
     def spin(type = :spinner, delay = nil)
       $stdout.sync = true
+      hide_cursor
       print @banner
       if delay.nil? then send type else send type, delay end
+    ensure
+      show_cursor
     end
 
     private
