@@ -1,5 +1,7 @@
 require 'stringio'
 
+$console = STDOUT
+
 module SpinningCursor
   if RUBY_PLATFORM =~ /(win|w)32$/
     # DOS
@@ -15,7 +17,7 @@ module SpinningCursor
   # Manages line reset in the console
   #
   def reset_line(text = "")
-    print "\r#{CLR}#{text}"
+    $console.print "\r#{CLR}#{text}"
   end
 
   def capture_console
@@ -23,7 +25,7 @@ module SpinningCursor
   end
 
   def release_console
-    $stdout = STDOUT
+    $stdout = $console
   end
 
   #
@@ -42,11 +44,11 @@ module SpinningCursor
     end
 
     def hide_cursor
-      STDOUT.print "\e[?25l"
+      $console.print "\e[?25l"
     end
 
     def show_cursor
-      STDOUT.print "\e[?25h"
+      $console.print "\e[?25h"
     end
 
     #
@@ -55,7 +57,7 @@ module SpinningCursor
     def spin(type = :spinner, delay = nil)
       $stdout.sync = true
       hide_cursor
-      print @banner
+      $console.print @banner
       if delay.nil? then send type else send type, delay end
     ensure
       show_cursor
@@ -79,10 +81,17 @@ module SpinningCursor
 
     def cycle_through(chars, delay)
       chars.cycle do |char|
-        print " " unless @banner.empty?
-        print char
+        unless $stdout.string.empty?
+          $console.print "\r\e[0K"
+          $console.print $stdout.string
+          $console.print "\n" unless $stdout.string[-1] == "\n"
+          $stdout.string = "" # TODO: Check for race condition.
+        end
+        $console.print "\r#{@banner}"
+        $console.print " " unless @banner.empty?
+        $console.print "#{char}"
         sleep delay
-        SpinningCursor.reset_line @banner
+        #SpinningCursor.reset_line @banner
       end
     end
   end

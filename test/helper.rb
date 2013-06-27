@@ -22,10 +22,10 @@ require 'stringio'
 module Kernel
   def capture_stdout
     out = StringIO.new
-    $stdout = out
+    $console = out
     yield out
   ensure
-    $stdout = STDOUT
+    $console = STDOUT
   end
 end
 
