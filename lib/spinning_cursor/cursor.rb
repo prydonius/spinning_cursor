@@ -24,6 +24,15 @@ module SpinningCursor
     $console.print "#{ESC_R_AND_CLR}#{text}"
   end
 
+  def save_stdout_sync
+    @stdout_sync_saved_state = STDOUT.sync
+    STDOUT.sync = true
+  end
+
+  def restore_stdout_sync
+    STDOUT.sync = @stdout_sync_saved_state
+  end
+
   def capture_console
     $stdout = StringIO.new
   end
@@ -85,7 +94,7 @@ module SpinningCursor
         unless $stdout.is_a?(StringIO) and $stdout.string.empty?
           $console.print "#{ESC_R_AND_CLR}"
           $console.print $stdout.string
-          $console.print "\n" unless $stdout.string[-1] == "\n"
+          $console.print "\n" unless $stdout.string[-1,1] == "\n"
           $stdout.string = "" # TODO: Check for race condition.
         end
         $console.print "#{ESC_R_AND_CLR}#{@banner}"
