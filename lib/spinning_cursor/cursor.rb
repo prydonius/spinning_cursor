@@ -21,7 +21,7 @@ module SpinningCursor
   # Manages line reset in the console
   #
   def reset_line(text = "")
-    $console.print "\r#{CLR}#{text}"
+    $console.print "#{ESC_R_AND_CLR}#{text}"
   end
 
   def capture_console
@@ -82,17 +82,16 @@ module SpinningCursor
 
     def cycle_through(chars, delay)
       chars.cycle do |char|
-        unless $stdout.string.empty?
-          $console.print "\r\e[0K"
+        unless $stdout.is_a?(StringIO) and $stdout.string.empty?
+          $console.print "#{ESC_R_AND_CLR}"
           $console.print $stdout.string
           $console.print "\n" unless $stdout.string[-1] == "\n"
           $stdout.string = "" # TODO: Check for race condition.
         end
-        $console.print "\r#{@banner}"
+        $console.print "#{ESC_R_AND_CLR}#{@banner}"
         $console.print " " unless @banner.empty?
         $console.print "#{char}"
         sleep delay
-        #SpinningCursor.reset_line @banner
       end
     end
   end

@@ -21,13 +21,17 @@ require 'stringio'
  
 module Kernel
   def capture_stdout
+    SpinningCursor.capture_console
     out = StringIO.new
     $console = out
     yield out
   ensure
     $console = STDOUT
+    SpinningCursor.release_console
   end
 end
+
+include SpinningCursor
 
 Thread.abort_on_exception=true
 
