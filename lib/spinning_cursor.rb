@@ -26,7 +26,7 @@ module SpinningCursor
         do_exec_time do
           @parsed.originator.instance_eval &@parsed.action
         end
-      rescue Exception => e
+      rescue StandardError => e
         set_message "#{e.message}\n#{e.backtrace.join("\n")}"
       ensure
         return stop
