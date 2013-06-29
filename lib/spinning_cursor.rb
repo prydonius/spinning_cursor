@@ -13,6 +13,7 @@ module SpinningCursor
     stop if alive?
 
     capture_console
+    hide_cursor
 
     @parsed = Parser.new(block)
     @cursor = Cursor.new(@parsed.banner)
@@ -44,6 +45,7 @@ module SpinningCursor
   def stop
     begin
       release_console
+      show_cursor
 
       @curs.kill
       # Wait for the cursor to die -- can cause problems otherwise

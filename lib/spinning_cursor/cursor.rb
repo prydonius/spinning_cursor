@@ -32,6 +32,14 @@ module SpinningCursor
     $stdout = $console
   end
 
+  def hide_cursor
+    $console.print ESC_CURS_INVIS
+  end
+
+  def show_cursor
+    $console.print ESC_CURS_VIS
+  end
+
   #
   # This class contains the cursor types (and their helper methods)
   #
@@ -47,24 +55,13 @@ module SpinningCursor
       @banner = banner
     end
 
-    def hide_cursor
-      $console.print "\e[?25l"
-    end
-
-    def show_cursor
-      $console.print "\e[?25h"
-    end
-
     #
     # Takes a cursor type symbol and delay, and starts the printing
     #
     def spin(type = :spinner, delay = nil)
       $stdout.sync = true
-      hide_cursor
       $console.print @banner
       if delay.nil? then send type else send type, delay end
-    ensure
-      show_cursor
     end
 
     private
