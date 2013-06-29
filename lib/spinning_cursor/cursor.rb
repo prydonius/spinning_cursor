@@ -13,6 +13,10 @@ module SpinningCursor
     CLR = "\e[0K"
   end
 
+  ESC_CURS_INVIS = "\e[?25l"
+  ESC_CURS_VIS   = "\e[?25h"
+  ESC_R_AND_CLR  = "\r#{CLR}"
+
   #
   # Manages line reset in the console
   #
