@@ -12,6 +12,7 @@ module SpinningCursor
   def start(&block)
     stop if alive?
 
+    save_stdout_sync
     capture_console
     hide_cursor
 
@@ -44,6 +45,7 @@ module SpinningCursor
   #
   def stop
     begin
+      restore_stdout_sync
       release_console
       show_cursor
 
