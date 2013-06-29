@@ -17,6 +17,7 @@ module SpinningCursor
     @parsed = Parser.new(block)
     @cursor = Cursor.new(@parsed.banner)
     @curs   = Thread.new { @cursor.spin(@parsed.type, @parsed.delay) }
+    @curs.abort_on_exception = true
     @start  = @finish = @elapsed = nil
 
     if @parsed.action

@@ -29,5 +29,7 @@ module Kernel
   end
 end
 
+Thread.abort_on_exception=true
+
 class Test::Unit::TestCase
 end
