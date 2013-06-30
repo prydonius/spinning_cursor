@@ -35,7 +35,7 @@ class TestSpinningCursor < Test::Unit::TestCase
       end
 
       assert_raise SpinningCursor::CursorNotRunning do
-        SpinningCursor.stop
+       SpinningCursor.stop
       end
     end
   end

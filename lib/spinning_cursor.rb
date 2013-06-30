@@ -12,9 +12,14 @@ module SpinningCursor
   def start(&block)
     stop if alive?
 
+    save_stdout_sync
+    capture_console
+    hide_cursor
+
     @parsed = Parser.new(block)
     @cursor = Cursor.new(@parsed.banner)
     @curs   = Thread.new { @cursor.spin(@parsed.type, @parsed.delay) }
+    @curs.abort_on_exception = true
     @start  = @finish = @elapsed = nil
 
     if @parsed.action
@@ -23,7 +28,7 @@ module SpinningCursor
         do_exec_time do
           @parsed.originator.instance_eval &@parsed.action
         end
-      rescue Exception => e
+      rescue StandardError => e
         set_message "#{e.message}\n#{e.backtrace.join("\n")}"
       ensure
         return stop
@@ -40,6 +45,10 @@ module SpinningCursor
   #
   def stop
     begin
+      restore_stdout_sync
+      release_console
+      show_cursor
+
       @curs.kill
       # Wait for the cursor to die -- can cause problems otherwise
       sleep(0.1) while @curs.alive?

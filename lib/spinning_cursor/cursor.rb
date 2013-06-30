@@ -1,3 +1,7 @@
+require 'stringio'
+
+$console = STDOUT
+
 module SpinningCursor
   if RUBY_PLATFORM =~ /(win|w)32$/
     # DOS
@@ -9,11 +13,40 @@ module SpinningCursor
     CLR = "\e[0K"
   end
 
+  ESC_CURS_INVIS = "\e[?25l"
+  ESC_CURS_VIS   = "\e[?25h"
+  ESC_R_AND_CLR  = "\r#{CLR}"
+
   #
   # Manages line reset in the console
   #
   def reset_line(text = "")
-    print "\r#{CLR}#{text}"
+    $console.print "#{ESC_R_AND_CLR}#{text}"
+  end
+
+  def save_stdout_sync
+    @stdout_sync_saved_state = STDOUT.sync
+    STDOUT.sync = true
+  end
+
+  def restore_stdout_sync
+    STDOUT.sync = @stdout_sync_saved_state
+  end
+
+  def capture_console
+    $stdout = StringIO.new
+  end
+
+  def release_console
+    $stdout = $console
+  end
+
+  def hide_cursor
+    $console.print ESC_CURS_INVIS
+  end
+
+  def show_cursor
+    $console.print ESC_CURS_VIS
   end
 
   #
@@ -31,24 +64,13 @@ module SpinningCursor
       @banner = banner
     end
 
-    def hide_cursor
-      STDOUT.print "\e[?25l"
-    end
-
-    def show_cursor
-      STDOUT.print "\e[?25h"
-    end
-
     #
     # Takes a cursor type symbol and delay, and starts the printing
     #
     def spin(type = :spinner, delay = nil)
       $stdout.sync = true
-      hide_cursor
-      print @banner
+      $console.print @banner
       if delay.nil? then send type else send type, delay end
-    ensure
-      show_cursor
     end
 
     private
@@ -69,10 +91,16 @@ module SpinningCursor
 
     def cycle_through(chars, delay)
       chars.cycle do |char|
-        print " " unless @banner.empty?
-        print char
+        unless $stdout.is_a?(StringIO) and $stdout.string.empty?
+          $console.print "#{ESC_R_AND_CLR}"
+          $console.print $stdout.string
+          $console.print "\n" unless $stdout.string[-1,1] == "\n"
+          $stdout.string = "" # TODO: Check for race condition.
+        end
+        $console.print "#{ESC_R_AND_CLR}#{@banner}"
+        $console.print " " unless @banner.empty?
+        $console.print "#{char}"
         sleep delay
-        SpinningCursor.reset_line @banner
       end
     end
   end
