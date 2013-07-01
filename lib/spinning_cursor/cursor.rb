@@ -53,7 +53,8 @@ module SpinningCursor
   # This class contains the cursor types (and their helper methods)
   #
   class Cursor
-    attr_accessor :banner
+    include SpinningCursor::ConsoleHelper
+    attr_accessor :banner, :output
 
     #
     # As of v0.1.0: only initializes the cursor class, use the spin
@@ -67,8 +68,9 @@ module SpinningCursor
     #
     # Takes a cursor type symbol and delay, and starts the printing
     #
-    def spin(type = :spinner, delay = nil)
+    def spin(type = :spinner, delay = nil, output_mode=:inline)
       $stdout.sync = true
+      @output = output_mode
       $console.print @banner
       if delay.nil? then send type else send type, delay end
     end
@@ -91,7 +93,7 @@ module SpinningCursor
 
     def cycle_through(chars, delay)
       chars.cycle do |char|
-        unless $stdout.is_a?(StringIO) and $stdout.string.empty?
+        unless @output==:at_stop or captured_console_empty?
           $console.print "#{ESC_R_AND_CLR}"
           $console.print $stdout.string
           $console.print "\n" unless $stdout.string[-1,1] == "\n"

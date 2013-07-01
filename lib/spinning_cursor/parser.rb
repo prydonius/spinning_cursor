@@ -37,7 +37,7 @@ module SpinningCursor
     #        for setting use method with arguments
     #            e.g. <tt>banner "my banner"</tt>.
     #
-    %w[banner type message delay].each do |method|
+    %w[banner type message delay output].each do |method|
       define_method(method) do |*args|
         var = "@#{method}"
         return instance_variable_get(var) unless args.first
