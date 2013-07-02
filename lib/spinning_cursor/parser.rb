@@ -17,7 +17,6 @@ module SpinningCursor
         instance_eval &proc
       end
 
-      self
     end
 
     #
