@@ -3,6 +3,8 @@ require "spinning_cursor/parser"
 
 module SpinningCursor
   extend self
+  include self::ConsoleHelpers
+  extend  self::ConsoleHelpers
 
   #
   # Sends passed block to Parser, and starts cursor thread
