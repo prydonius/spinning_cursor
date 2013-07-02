@@ -25,9 +25,10 @@ module SpinningCursor
     @curs.abort_on_exception = true
     @start  = @finish = @elapsed = nil
 
+    @stop_watch = StopWatch.new
+
     if @parsed.action
       # The action
-      @stop_watch = StopWatch.new
       begin
         @stop_watch.measure do
           @parsed.originator.instance_eval &@parsed.action
