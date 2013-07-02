@@ -48,7 +48,10 @@ module SpinningCursor
   def stop
     begin
       restore_stdout_sync
-      release_console
+      if console_captured?
+        $console.print ESC_R_AND_CLR + $stdout.string
+        release_console
+      end
       show_cursor
 
       @curs.kill
