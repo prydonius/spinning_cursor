@@ -25,13 +25,13 @@ module SpinningCursor
       $console.print "#{ESC_R_AND_CLR}#{text}"
     end
 
-    def save_stdout_sync
-      @stdout_sync_saved_state = STDOUT.sync
+    def save_stdout_sync_status
+      @stdout_sync_saved_status = STDOUT.sync
       STDOUT.sync = true
     end
 
-    def restore_stdout_sync
-      STDOUT.sync = @stdout_sync_saved_state
+    def restore_stdout_sync_status
+      STDOUT.sync = @stdout_sync_saved_status
     end
 
     def capture_console

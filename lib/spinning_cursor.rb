@@ -15,7 +15,7 @@ module SpinningCursor
   def start(&block)
     stop if alive?
 
-    save_stdout_sync
+    save_stdout_sync_status
     capture_console
     hide_cursor
 
@@ -49,7 +49,7 @@ module SpinningCursor
   #
   def stop
     begin
-      restore_stdout_sync
+      restore_stdout_sync_status
       if console_captured?
         $console.print ESC_R_AND_CLR + $stdout.string
         release_console
