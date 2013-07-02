@@ -107,12 +107,12 @@ class TestSpinningCursor < Test::Unit::TestCase
         SpinningCursor.start
         sleep 0.2
         result = SpinningCursor.stop
-        timing_1 = result[:finished] - result[:started]
+        timing_1 = result[:elapsed_time]
 
         SpinningCursor.start
         sleep 0.2
         result = SpinningCursor.stop
-        timing_2 = result[:finished] - result[:started]
+        timing_2 = result[:elapsed_time]
 
         assert_equal (timing_1*10).round, (timing_2*10).round,
         "t1 #{timing_1} and t2 #{timing_2} should be equal"
@@ -127,7 +127,7 @@ class TestSpinningCursor < Test::Unit::TestCase
             sleep 0.2
           end
         end
-        timing_1 = result[:finished] - result[:started]
+        timing_1 = result[:elapsed_time]
 
         result =
         SpinningCursor.start do
@@ -135,7 +135,7 @@ class TestSpinningCursor < Test::Unit::TestCase
             sleep 0.2
           end
         end
-        timing_2 = result[:finished] - result[:started]
+        timing_2 = result[:elapsed_time]
 
         assert_equal (timing_1*10).round, (timing_2*10).round,
         "t1 #{timing_1} and t2 #{timing_2} should be equal"
