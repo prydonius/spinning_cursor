@@ -41,9 +41,9 @@ class StopWatch
     end
 
     def timing
-      [ :start_time   => @start_time,
+      { :start_time   => @start_time,
         :stop_time    => @stop_time,
-        :elapsed_time => elapsed_time ]
+        :elapsed_time => elapsed_time }
     end
 
 end
