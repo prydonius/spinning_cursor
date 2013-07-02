@@ -1,3 +1,4 @@
+require "spinning_cursor/console_helpers"
 require "spinning_cursor/cursor"
 require "spinning_cursor/parser"
 require "spinning_cursor/stop_watch"
