@@ -63,25 +63,27 @@ module SpinningCursor
   #
   class Cursor
     include SpinningCursor::ConsoleHelpers
-    attr_accessor :banner, :output
 
     #
     # As of v0.1.0: only initializes the cursor class, use the spin
     # method to start the printing. Takes only the banner argument as
     # a result of this.
     #
-    def initialize(banner = "Loading")
-      @banner = banner
+    def initialize(parsed)
+      @parsed = parsed
     end
 
     #
     # Takes a cursor type symbol and delay, and starts the printing
     #
-    def spin(type = :spinner, delay = nil, output_mode=:inline)
+    def spin
       $stdout.sync = true
-      @output = output_mode
-      $console.print @banner
-      if delay.nil? then send type else send type, delay end
+      $console.print @parsed.banner
+      if @parsed.delay
+        send @parsed.type, @parsed.delay
+      else
+        send @parsed.type
+      end
     end
 
     private
@@ -102,14 +104,14 @@ module SpinningCursor
 
     def cycle_through(chars, delay)
       chars.cycle do |char|
-        unless @output==:at_stop or captured_console_empty?
+        unless @parsed.output==:at_stop or captured_console_empty?
           $console.print "#{ESC_R_AND_CLR}"
           $console.print $stdout.string
           $console.print "\n" unless $stdout.string[-1,1] == "\n"
           $stdout.string = "" # TODO: Check for race condition.
         end
-        $console.print "#{ESC_R_AND_CLR}#{@banner}"
-        $console.print " " unless @banner.empty?
+        $console.print "#{ESC_R_AND_CLR}#{@parsed.banner}"
+        $console.print " " unless @parsed.banner.empty?
         $console.print "#{char}"
         sleep delay
       end

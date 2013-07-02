@@ -19,11 +19,10 @@ module SpinningCursor
     capture_console
     hide_cursor
 
-    @parsed = Parser.new(block)
-    @cursor = Cursor.new(@parsed.banner)
-    @curs   = Thread.new { @cursor.spin(@parsed.type, @parsed.delay, @parsed.output) }
-    @curs.abort_on_exception = true
-    @start  = @finish = @elapsed = nil
+    @parsed = Parser.new(&block)
+    @cursor = Cursor.new(@parsed)
+    @spinner = Thread.new { @cursor.spin }
+    @spinner.abort_on_exception = true
 
     @stop_watch = StopWatch.new
 
@@ -31,7 +30,7 @@ module SpinningCursor
       # The action
       begin
         @stop_watch.measure do
-          @parsed.originator.instance_eval &@parsed.action
+          @parser.outer_scope_object.instance_eval &@parsed.action
         end
       rescue StandardError => e
         set_message "#{e.message}\n#{e.backtrace.join("\n")}"
@@ -57,9 +56,9 @@ module SpinningCursor
       end
       show_cursor
 
-      @curs.kill
+      @spinner.kill
       # Wait for the cursor to die -- can cause problems otherwise
-      sleep(0.1) while @curs.alive?
+      @spinner.join
       # Set cursor to nil so set_banner method only works
       # when cursor is actually running.
       @cursor = nil
@@ -81,7 +80,7 @@ module SpinningCursor
   # Determines whether the cursor thread is still running
   #
   def alive?
-    @curs and @curs.alive?
+    @spinner and @spinner.alive?
   end
 
   #
