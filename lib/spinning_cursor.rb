@@ -1,5 +1,6 @@
 require "spinning_cursor/cursor"
 require "spinning_cursor/parser"
+require "spinning_cursor/stop_watch"
 
 module SpinningCursor
   extend self
@@ -26,8 +27,9 @@ module SpinningCursor
 
     if @parsed.action
       # The action
+      @stop_watch = StopWatch.new
       begin
-        do_exec_time do
+        @stop_watch.measure do
           @parsed.originator.instance_eval &@parsed.action
         end
       rescue StandardError => e
@@ -37,7 +39,7 @@ module SpinningCursor
       end
     else
       # record start time
-      do_exec_time
+      @stop_watch.start
     end
   end
 
@@ -67,7 +69,8 @@ module SpinningCursor
       @parsed = nil
 
       # Return execution time
-      get_exec_time
+      @stop_watch.stop
+      @stop_watch.timing
     rescue NameError
       raise CursorNotRunning.new "Can't stop, no cursor running."
     end
@@ -105,29 +108,7 @@ module SpinningCursor
     end
   end
 
-  #
-  # Retrieves execution time information
-  #
-  def get_exec_time
-    raise NoTaskError.new "An execution hasn't started or finished." unless @start
-    do_exec_time unless @finish or @curs.alive?
-    { :started => @start, :finished => @finish,
-      :elapsed => @elapsed }
-  end
-
   private
-
-  #
-  # Takes a block, and returns the start, finish and elapsed times
-  #
-  def do_exec_time
-    if @curs.alive?
-      @start = Time.now
-      yield if block_given?
-    end
-    @finish = Time.now
-    @elapsed = @finish - @start
-  end
 
   class NoTaskError < Exception ; end
   class CursorNotRunning < NoTaskError ; end
