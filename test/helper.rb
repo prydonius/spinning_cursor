@@ -18,6 +18,14 @@ require 'spinning_cursor'
 # (http://thinkingdigitally.com/archive/capturing-output-from-puts-in-ruby/)
 
 require 'stringio'
+
+def kill_other_threads
+  other_threads = Thread.list - [Thread.current]
+  other_threads.each do |th|
+    th.kill
+    th.join
+  end
+end
  
 module Kernel
   def capture_stdout
@@ -26,6 +34,7 @@ module Kernel
     $console = out
     yield out
   ensure
+    kill_other_threads
     $console = STDOUT
     SpinningCursor.release_console
   end
