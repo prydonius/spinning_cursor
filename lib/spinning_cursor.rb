@@ -22,8 +22,10 @@ module SpinningCursor
 
     @parsed = Parser.new(&block)
     @cursor = Cursor.new(@parsed)
-    @spinner = Thread.new { @cursor.spin }
-    @spinner.abort_on_exception = true
+    @spinner = Thread.new do
+      abort_on_exception = true
+      @cursor.spin
+    end
 
     @stop_watch = StopWatch.new
 
