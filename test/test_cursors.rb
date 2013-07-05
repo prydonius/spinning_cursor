@@ -1,18 +1,30 @@
 require 'helper'
 
 class TestSpinningCursorCursor < Test::Unit::TestCase
-  delay = 0.2
   context "dots" do
+    parsed = Parser.new { type :dots; delay 0.2; banner ""}
+    delay = parsed.delay
     should "change 'frames' with correct delay" do
       capture_stdout do |out|
         dots = Thread.new do
-          SpinningCursor::Cursor.new("").spin :dots, delay
+          SpinningCursor::Cursor.new(parsed).spin
         end
         # slight delay to get things started
         sleep (delay/4.0)
-        assert_equal "#{ESC_R_AND_CLR}.", out.string
+        buffer = "#{ESC_R_AND_CLR}" << "."
+        assert_equal buffer, out.string
+
         sleep delay
-        assert_equal "#{ESC_R_AND_CLR}.#{ESC_R_AND_CLR}..", out.string
+        buffer << "#{ESC_R_AND_CLR}" << ".."
+        assert_equal buffer, out.string
+
+        sleep delay
+        buffer << "#{ESC_R_AND_CLR}" << "..."
+        assert_equal buffer, out.string
+
+        sleep delay
+        buffer << "#{ESC_R_AND_CLR}"
+        assert_equal buffer, out.string
         # don't need to go through the whole thing, otherwise test will take
         # too long
         dots.kill
@@ -22,10 +34,11 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
 
   context "spinner" do
     should "cycle through correctly" do
-      delay = 0.2
+      parsed = Parser.new { type :spinner; delay 0.2; banner ""}
+      delay = parsed.delay
       capture_stdout do |out|
         spinner = Thread.new do
-          SpinningCursor::Cursor.new("").spin :spinner, delay
+          SpinningCursor::Cursor.new(parsed).spin
         end
         # slight delay to get things started
         sleep (delay/3.0)
@@ -48,10 +61,11 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
     end
 
     should "changes 'frames' with correct delay" do
-      delay = 0.2
+      parsed = Parser.new { type :spinner; delay 0.2; banner ""}
+      delay = parsed.delay
       capture_stdout do |out|
         spinner = Thread.new do
-          SpinningCursor::Cursor.new("").spin :spinner, delay
+          SpinningCursor::Cursor.new(parsed).spin
         end
         sleep (delay/4.0)
         buffer = (ESC_R_AND_CLR + "|")

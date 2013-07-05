@@ -14,7 +14,7 @@ class TestSpinningCursorParser < Test::Unit::TestCase
 
   context "banner, type, message, delay and action methods" do
     setup do
-      @parser = SpinningCursor::Parser.new Proc.new { }
+      @parser = SpinningCursor::Parser.new
     end
 
     should "act as getters and setters" do
