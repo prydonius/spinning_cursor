@@ -96,6 +96,10 @@ class TestSpinningCursor < Test::Unit::TestCase
         SpinningCursor.start do
           delay 0.2
           action do
+            # Guessed that assertions are not working from inside action block
+            # This assert false should fail but it pass
+            # TODO: Find another way to 'assert'
+            assert false
             # Have to give it time to print the banners
             sleep 0.1
             assert_equal true, (out.string.include? "Loading")
