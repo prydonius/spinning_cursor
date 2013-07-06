@@ -37,8 +37,9 @@ module SpinningCursor
         end
       rescue StandardError => e
         set_message "#{e.message}\n#{e.backtrace.join("\n")}"
+        raise
       ensure
-        return stop
+        stop
       end
     else
       # record start time
