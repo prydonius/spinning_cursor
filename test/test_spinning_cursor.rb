@@ -13,6 +13,15 @@ class TestSpinningCursor < Test::Unit::TestCase
       end
     end
 
+    should "Parser#outer_scope_object point to 'caller'" do
+      capture_stdout do |out|
+        SpinningCursor.start { }
+        parsed = SpinningCursor.instance_variable_get(:@parsed)
+        assert_equal self, parsed.outer_scope_object
+        SpinningCursor.stop
+      end
+    end
+
     should "evalute the block from the calling class" do
       @num = 1
       capture_stdout do |out|
