@@ -76,12 +76,14 @@ class TestSpinningCursor < Test::Unit::TestCase
 
     should "stop and display error if an unmanaged exception is thrown" do
       capture_stdout do |out|
-        SpinningCursor.start do
-          action do
-            raise "An exception!"
+        begin
+          SpinningCursor.start do
+            action do
+              raise "An exception!"
+            end
           end
+        rescue # Just to let the test go on
         end
-
         assert_equal true, (out.string.include? "An exception!")
       end
     end
