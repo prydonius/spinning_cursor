@@ -33,7 +33,7 @@ module SpinningCursor
       # The action
       begin
         @stop_watch.measure do
-          @parser.outer_scope_object.instance_eval &@parsed.action
+          @parsed.outer_scope_object.instance_eval &@parsed.action
         end
       rescue StandardError => e
         set_message "#{e.message}\n#{e.backtrace.join("\n")}"
