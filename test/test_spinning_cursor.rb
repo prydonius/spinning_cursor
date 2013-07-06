@@ -32,6 +32,17 @@ class TestSpinningCursor < Test::Unit::TestCase
         assert_equal 2, @num
       end
     end
+
+    should "raise an exception if something wrong inside the 'action' block" do
+      class SomethingWrongHappened < StandardError; end
+      assert_raise SomethingWrongHappened do
+        capture_stdout do |out|
+          SpinningCursor.start do
+            action { raise SomethingWrongHappened }
+          end
+        end
+      end
+    end
   end
 
   context "when an action block isn't passed it" do
