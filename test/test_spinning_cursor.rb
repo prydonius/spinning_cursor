@@ -109,11 +109,11 @@ class TestSpinningCursor < Test::Unit::TestCase
           action do
             # Have to give it time to print the banners
             sleep 0.1
-            assert_equal true, (out.string.include? "Loading")
+            assert_equal true, (out.string.include? "Loading"), "It should initialy show default banner"
             sleep 0.1
             SpinningCursor.set_banner "Finishing up"
             sleep 0.2
-            assert_equal true, (out.string.include? "Finishing up")
+            assert_equal true, (out.string.include? "Finishing up"), "It should have changed banner"
             sleep 0.1
           end
         end

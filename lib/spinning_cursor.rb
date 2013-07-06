@@ -105,7 +105,7 @@ module SpinningCursor
   #
   def set_banner(banner)
     begin
-      @cursor.banner = banner
+      @parsed.banner banner
     rescue NameError
       raise CursorNotRunning.new "Cursor isn't running... are you sure " +
         "you're calling this from an action block?"
