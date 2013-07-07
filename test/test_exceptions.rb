@@ -17,12 +17,6 @@ class TestSpinningCursor < Test::Unit::TestCase
       end
     end
 
-    should "a) raise NoTaskError when getting execution time if no task ran" do
-      assert_raise SpinningCursor::NoTaskError do
-        SpinningCursor.get_exec_time
-      end
-    end
-
     should "raise CursorNotRunning errors when cursor has run and finished" do
       SpinningCursor.start
       SpinningCursor.stop

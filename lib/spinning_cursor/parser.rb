@@ -1,23 +1,22 @@
 module SpinningCursor
   class Parser
-    attr_reader :originator
+    attr_accessor :outer_scope_object
 
     #
     # Parses proc
     #
-    def initialize(proc)
+    def initialize(&block)
       @banner  = "Loading"
       @type    = :spinner
       @message = "Done"
       @delay   = nil
+      @action  = nil
+      @output  = :inline
 
-      if proc
-        # Store the originating class for use in method_missing
-        @originator = eval "self", proc.binding
-        instance_eval &proc
+      if block_given?
+        @outer_scope_object = eval("self", block.binding)
+        instance_eval &block
       end
-
-      self
     end
 
     #
@@ -37,7 +36,7 @@ module SpinningCursor
     #        for setting use method with arguments
     #            e.g. <tt>banner "my banner"</tt>.
     #
-    %w[banner type message delay].each do |method|
+    %w[banner type message delay output].each do |method|
       define_method(method) do |*args|
         var = "@#{method}"
         return instance_variable_get(var) unless args.first
@@ -51,7 +50,7 @@ module SpinningCursor
     # Pass any other methods to the calling class
     #
     def method_missing(method, *args, &block)
-      @originator.send method, *args, &block
+      @outer_scope_object.send method, *args, &block
     end
   end
 end

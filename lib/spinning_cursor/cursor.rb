@@ -1,54 +1,30 @@
 module SpinningCursor
-  if RUBY_PLATFORM =~ /(win|w)32$/
-    # DOS
-    # Contains a string to clear the line in the shell
-    CLR = "                                                               \r"
-  else
-    # Unix
-    # Contains a string to clear the line in the shell
-    CLR = "\e[0K"
-  end
-
-  #
-  # Manages line reset in the console
-  #
-  def reset_line(text = "")
-    print "\r#{CLR}#{text}"
-  end
-
   #
   # This class contains the cursor types (and their helper methods)
   #
   class Cursor
-    attr_accessor :banner
+    include SpinningCursor::ConsoleHelpers
 
     #
     # As of v0.1.0: only initializes the cursor class, use the spin
     # method to start the printing. Takes only the banner argument as
     # a result of this.
     #
-    def initialize(banner = "Loading")
-      @banner = banner
-    end
-
-    def hide_cursor
-      STDOUT.print "\e[?25l"
-    end
-
-    def show_cursor
-      STDOUT.print "\e[?25h"
+    def initialize(parsed)
+      @parsed = parsed
     end
 
     #
     # Takes a cursor type symbol and delay, and starts the printing
     #
-    def spin(type = :spinner, delay = nil)
+    def spin
       $stdout.sync = true
-      hide_cursor
-      print @banner
-      if delay.nil? then send type else send type, delay end
-    ensure
-      show_cursor
+      $console.print @parsed.banner
+      if @parsed.delay
+        send @parsed.type, @parsed.delay
+      else
+        send @parsed.type
+      end
     end
 
     private
@@ -69,10 +45,16 @@ module SpinningCursor
 
     def cycle_through(chars, delay)
       chars.cycle do |char|
-        print " " unless @banner.empty?
-        print char
+        unless @parsed.output==:at_stop or captured_console_empty?
+          $console.print "#{ESC_R_AND_CLR}"
+          $console.print $stdout.string
+          $console.print "\n" unless $stdout.string[-1,1] == "\n"
+          $stdout.string = "" # TODO: Check for race condition.
+        end
+        $console.print "#{ESC_R_AND_CLR}#{@parsed.banner}"
+        $console.print " " unless @parsed.banner.empty?
+        $console.print "#{char}"
         sleep delay
-        SpinningCursor.reset_line @banner
       end
     end
   end
