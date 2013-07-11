@@ -13,6 +13,15 @@ class TestSpinningCursor < Test::Unit::TestCase
       end
     end
 
+    should "Parser#outer_scope_object point to 'caller'" do
+      capture_stdout do |out|
+        SpinningCursor.start { }
+        parsed = SpinningCursor.instance_variable_get(:@parsed)
+        assert_equal self, parsed.outer_scope_object
+        SpinningCursor.stop
+      end
+    end
+
     should "evalute the block from the calling class" do
       @num = 1
       capture_stdout do |out|
@@ -21,6 +30,17 @@ class TestSpinningCursor < Test::Unit::TestCase
         end
 
         assert_equal 2, @num
+      end
+    end
+
+    should "raise an exception if something wrong inside the 'action' block" do
+      class SomethingWrongHappened < StandardError; end
+      assert_raise SomethingWrongHappened do
+        capture_stdout do |out|
+          SpinningCursor.start do
+            action { raise SomethingWrongHappened }
+          end
+        end
       end
     end
   end
@@ -56,12 +76,14 @@ class TestSpinningCursor < Test::Unit::TestCase
 
     should "stop and display error if an unmanaged exception is thrown" do
       capture_stdout do |out|
-        SpinningCursor.start do
-          action do
-            raise "An exception!"
+        begin
+          SpinningCursor.start do
+            action do
+              raise "An exception!"
+            end
           end
+        rescue # Just to let the test go on
         end
-
         assert_equal true, (out.string.include? "An exception!")
       end
     end
@@ -89,11 +111,11 @@ class TestSpinningCursor < Test::Unit::TestCase
           action do
             # Have to give it time to print the banners
             sleep 0.1
-            assert_equal true, (out.string.include? "Loading")
+            assert_equal true, (out.string.include? "Loading"), "It should initialy show default banner"
             sleep 0.1
             SpinningCursor.set_banner "Finishing up"
             sleep 0.2
-            assert_equal true, (out.string.include? "Finishing up")
+            assert_equal true, (out.string.include? "Finishing up"), "It should have changed banner"
             sleep 0.1
           end
         end
@@ -107,12 +129,12 @@ class TestSpinningCursor < Test::Unit::TestCase
         SpinningCursor.start
         sleep 0.2
         result = SpinningCursor.stop
-        timing_1 = result[:finished] - result[:started]
+        timing_1 = result[:elapsed_time]
 
         SpinningCursor.start
         sleep 0.2
         result = SpinningCursor.stop
-        timing_2 = result[:finished] - result[:started]
+        timing_2 = result[:elapsed_time]
 
         assert_equal (timing_1*10).round, (timing_2*10).round,
         "t1 #{timing_1} and t2 #{timing_2} should be equal"
@@ -127,7 +149,7 @@ class TestSpinningCursor < Test::Unit::TestCase
             sleep 0.2
           end
         end
-        timing_1 = result[:finished] - result[:started]
+        timing_1 = result[:elapsed_time]
 
         result =
         SpinningCursor.start do
@@ -135,7 +157,7 @@ class TestSpinningCursor < Test::Unit::TestCase
             sleep 0.2
           end
         end
-        timing_2 = result[:finished] - result[:started]
+        timing_2 = result[:elapsed_time]
 
         assert_equal (timing_1*10).round, (timing_2*10).round,
         "t1 #{timing_1} and t2 #{timing_2} should be equal"

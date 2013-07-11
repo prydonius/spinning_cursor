@@ -1,8 +1,12 @@
+require "spinning_cursor/console_helpers"
 require "spinning_cursor/cursor"
 require "spinning_cursor/parser"
+require "spinning_cursor/stop_watch"
 
 module SpinningCursor
   extend self
+  include self::ConsoleHelpers
+  extend  self::ConsoleHelpers
 
   #
   # Sends passed block to Parser, and starts cursor thread
@@ -12,25 +16,34 @@ module SpinningCursor
   def start(&block)
     stop if alive?
 
-    @parsed = Parser.new(block)
-    @cursor = Cursor.new(@parsed.banner)
-    @curs   = Thread.new { @cursor.spin(@parsed.type, @parsed.delay) }
-    @start  = @finish = @elapsed = nil
+    save_stdout_sync_status
+    capture_console
+    hide_cursor
+
+    @parsed = Parser.new(&block)
+    @cursor = Cursor.new(@parsed)
+    @spinner = Thread.new do
+      abort_on_exception = true
+      @cursor.spin
+    end
+
+    @stop_watch = StopWatch.new
 
     if @parsed.action
       # The action
       begin
-        do_exec_time do
-          @parsed.originator.instance_eval &@parsed.action
+        @stop_watch.measure do
+          @parsed.outer_scope_object.instance_eval &@parsed.action
         end
-      rescue Exception => e
+      rescue StandardError => e
         set_message "#{e.message}\n#{e.backtrace.join("\n")}"
+        raise
       ensure
-        return stop
+        stop
       end
     else
       # record start time
-      do_exec_time
+      @stop_watch.start
     end
   end
 
@@ -40,9 +53,16 @@ module SpinningCursor
   #
   def stop
     begin
-      @curs.kill
+      restore_stdout_sync_status
+      if console_captured?
+        $console.print ESC_R_AND_CLR + $stdout.string
+        release_console
+      end
+      show_cursor
+
+      @spinner.kill
       # Wait for the cursor to die -- can cause problems otherwise
-      sleep(0.1) while @curs.alive?
+      @spinner.join
       # Set cursor to nil so set_banner method only works
       # when cursor is actually running.
       @cursor = nil
@@ -53,7 +73,8 @@ module SpinningCursor
       @parsed = nil
 
       # Return execution time
-      get_exec_time
+      @stop_watch.stop
+      @stop_watch.timing
     rescue NameError
       raise CursorNotRunning.new "Can't stop, no cursor running."
     end
@@ -63,7 +84,7 @@ module SpinningCursor
   # Determines whether the cursor thread is still running
   #
   def alive?
-    @curs and @curs.alive?
+    @spinner and @spinner.alive?
   end
 
   #
@@ -84,36 +105,14 @@ module SpinningCursor
   #
   def set_banner(banner)
     begin
-      @cursor.banner = banner
+      @parsed.banner banner
     rescue NameError
       raise CursorNotRunning.new "Cursor isn't running... are you sure " +
         "you're calling this from an action block?"
     end
   end
 
-  #
-  # Retrieves execution time information
-  #
-  def get_exec_time
-    raise NoTaskError.new "An execution hasn't started or finished." unless @start
-    do_exec_time unless @finish or @curs.alive?
-    { :started => @start, :finished => @finish,
-      :elapsed => @elapsed }
-  end
-
   private
-
-  #
-  # Takes a block, and returns the start, finish and elapsed times
-  #
-  def do_exec_time
-    if @curs.alive?
-      @start = Time.now
-      yield if block_given?
-    end
-    @finish = Time.now
-    @elapsed = @finish - @start
-  end
 
   class NoTaskError < Exception ; end
   class CursorNotRunning < NoTaskError ; end
