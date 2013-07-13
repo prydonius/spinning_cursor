@@ -56,6 +56,11 @@ It's as easy as that!
 * `action` - The stuff you want to do whilst the cursor is spinning.
 * `message` - The message you want to show the user once the task is finished.
   Defaults to "Done".
+* `delay` - Sets the delay in seconds between the frames of the animation.
+  Defaults depend on type of cursor animation (spinner 0.5s, dots 1s)
+* `output` - Sets how to display program output during cursor animation
+  (`:inline` or `:at_stop`).
+  Defaults to `:inline`.
 
 ### But the action block would get too messy!
 
@@ -82,7 +87,7 @@ SpinningCursor.stop
 ```
 
 **Notice** the absence of the `action` option. The start method will only keep
-the cursor running if an `action` block isn't passed into it.
+the cursor running if an `action` block isn't passed to it.
 
 ### I want to be able to change the finish message conditionally!
 
@@ -147,7 +152,7 @@ The hash contains the following, self-explanatory keys:
 #### Suggestions
 
 There isn't much this library should do, but a good suggestion is always
-welcome. Make sure to use the issue track on GitHub to make suggestions -- and
+welcome. Make sure to use the issue tracker on GitHub to make suggestions -- and
 fork & pull request if you want to implement it yourself, of course.
 
 #### More Cursors!
@@ -166,7 +171,7 @@ indebted to you. It's a learning experience for me!
 
 * Check out the latest master to make sure the feature hasn't been implemented
   or the bug hasn't been fixed yet.
-* Check out the issue tracker to make sure someone already hasn't requested it
+* Check out the issue tracker to make sure someone hasn't already requested it
   and/or contributed it.
 * Fork the project.
 * Start a feature/bugfix branch.
@@ -177,3 +182,9 @@ indebted to you. It's a learning experience for me!
   to have your own version, or is otherwise necessary, that is fine, but
   please isolate to its own commit so I can cherry-pick around it.
 
+### List of contributors
+
+A massive thanks to those who have taken some time out to help improve
+Spinning Cursor!
+
+* Abinoam P. Marques Jr. (@abinoam)

@@ -1,6 +1,15 @@
 CHANGELOG
 ===============================================================================
 
+v0.2.0 (2013-07-13)
+  - Several bug fixes/internal API improvements (#4 #8 #9 #10 #11 #13)
+  - Suppress output from action block (#7)
+  - Add `output` option to display inline or all at once at the end (#13)
+  - Add `delay` option to specify cursor speed (#2)
+  - Hide terminal cursor during cursor animation (#11)
+  - Better exception handling (#13)
+
+
 v0.1.1 - v0.1.2 (2012-04-25)
   - Task timing is more concentrated (times, yields, works out the difference)
   - Trying to set the message/banner after a task has finished raises an

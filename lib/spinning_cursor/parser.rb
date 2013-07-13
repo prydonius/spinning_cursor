@@ -28,13 +28,17 @@ module SpinningCursor
       @action
     end
 
-    #
-    # Getters and setters for +banner+, +type+ and +message+
-    # attributes.
-    # Note:: for getting use method without arguments
-    #            e.g. <tt>banner</tt>
-    #        for setting use method with arguments
-    #            e.g. <tt>banner "my banner"</tt>.
+    # @method banner(banner)
+    # @method type(type)
+    # @method message(message)
+    # @method delay(delay)
+    # @method output(output)
+    # Getters and setters for `banner`, `type`, `message`, `delay` and `output`
+    # attributes
+    # @note For getting, use method without arguments
+    #   e.g. `banner`<br />
+    #   For setting, use method with arguments
+    #   e.g. `banner "my banner"`
     #
     %w[banner type message delay output].each do |method|
       define_method(method) do |*args|
