@@ -15,5 +15,5 @@ end
 
 group :test do
   gem "rake"
-  gem "shoulda", ">= 0"
+  gem "shoulda-context", ">= 0"
 end

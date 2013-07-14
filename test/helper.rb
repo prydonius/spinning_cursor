@@ -8,7 +8,7 @@ rescue Bundler::BundlerError => e
   exit e.status_code
 end
 require 'test/unit'
-require 'shoulda'
+require 'shoulda-context'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
@@ -26,7 +26,7 @@ def kill_other_threads
     th.join
   end
 end
- 
+
 module Kernel
   def capture_stdout
     SpinningCursor.capture_console
