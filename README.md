@@ -10,6 +10,8 @@ Inspired by Chris Wanstrath's
 [Choice](https://github.com/defunkt/choice), Spinning Cursor provides
 you with a _sexy_ DSL for easy use of the library.
 
+[![Build Status](https://travis-ci.org/prydonius/spinning_cursor.png?branch=master)](https://travis-ci.org/prydonius/spinning_cursor)
+
 ## Installation
 
 As easy as RubyGems:
