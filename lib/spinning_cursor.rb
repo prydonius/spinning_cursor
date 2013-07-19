@@ -53,6 +53,13 @@ module SpinningCursor
   #
   def stop
     begin
+      @spinner.kill
+      # Wait for the cursor to die -- can cause problems otherwise
+      @spinner.join
+      # Set cursor to nil so set_banner method only works
+      # when cursor is actually running.
+      @cursor = nil
+
       restore_stdout_sync_status
       if console_captured?
         $console.print ESC_R_AND_CLR + $stdout.string
@@ -60,12 +67,6 @@ module SpinningCursor
       end
       show_cursor
 
-      @spinner.kill
-      # Wait for the cursor to die -- can cause problems otherwise
-      @spinner.join
-      # Set cursor to nil so set_banner method only works
-      # when cursor is actually running.
-      @cursor = nil
       reset_line
       puts @parsed.message
       # Set parsed to nil so set_message method only works
