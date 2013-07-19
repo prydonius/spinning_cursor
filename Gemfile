@@ -14,6 +14,7 @@ group :development do
 end
 
 group :test do
+  gem "minitest", "~> 4.7", :require => "minitest/unit"
   gem "rake"
   gem "shoulda-context", ">= 0"
 end

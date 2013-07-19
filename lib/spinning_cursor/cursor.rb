@@ -19,7 +19,6 @@ module SpinningCursor
     #
     def spin
       $stdout.sync = true
-      $console.print @parsed.banner
       if @parsed.delay
         send @parsed.type, @parsed.delay
       else
@@ -51,9 +50,7 @@ module SpinningCursor
           $console.print "\n" unless $stdout.string[-1,1] == "\n"
           $stdout.string = "" # TODO: Check for race condition.
         end
-        $console.print "#{ESC_R_AND_CLR}#{@parsed.banner}"
-        $console.print " " unless @parsed.banner.empty?
-        $console.print "#{char}"
+        reset_line @parsed.banner.empty? ? char : "#{@parsed.banner} #{char}"
         sleep delay
       end
     end
