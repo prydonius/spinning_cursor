@@ -15,7 +15,11 @@ module SpinningCursor
 
       if block_given?
         @outer_scope_object = eval("self", block.binding)
-        instance_eval &block
+        if block.arity == 1
+          yield self
+        else
+          instance_eval &block
+        end
       end
     end
 

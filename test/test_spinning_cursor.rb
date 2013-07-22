@@ -162,4 +162,38 @@ class TestSpinningCursor < Test::Unit::TestCase
       end
     end
   end
+
+  context "SpinningCursor#start" do
+
+    context "with a block with 1 parameter (arity 1)" do
+      setup do
+        @my_inst = "outer_inst"
+        capture_stdout do |out|
+          SpinningCursor.start do |param|
+            @my_inst = "inner_inst"
+          end
+        end
+      end
+
+      should "outer instance variables be available inside" do
+        assert_equal "inner_inst", @my_inst
+      end
+    end
+
+    context "with a block without parameters (arity 0)" do
+      setup do
+        @my_inst = "outer_inst"
+        capture_stdout do |out|
+          SpinningCursor.start do
+            @my_inst = "inner_inst"
+          end
+        end
+      end
+
+      should "outer instance variables NOT be available inside" do
+        assert_equal "outer_inst", @my_inst
+      end
+    end
+  end
+
 end
