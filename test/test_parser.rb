@@ -75,4 +75,46 @@ class TestSpinningCursorParser < Test::Unit::TestCase
       assert_equal proc, @parser.action
     end
   end
+
+  context "SpinningCursor#start" do
+    context "with a block with 1 parameter (arity 1)" do
+      setup do
+        $outer_context = self
+        capture_stdout do |out|
+          SpinningCursor.start do |param|
+            $inner_context = self
+            $yielded_param = param
+          end
+        end
+      end
+
+      should "yield the Parser as parameter" do
+        assert_equal Parser, $yielded_param.class
+      end
+
+      should "outer context be available (outer self = inner self)" do
+        assert_equal $inner_context.object_id, $outer_context.object_id
+      end
+    end
+
+    context "with a block without parameters (arity 0)" do
+      setup do
+        $outer_context = self
+        capture_stdout do |out|
+          SpinningCursor.start do
+            $inner_context = self
+          end
+        end
+      end
+
+      should "instance_eval the block on Parser context" do
+        assert_equal Parser, $inner_context.class
+      end
+
+      should "outer context NOT be available (outer self != inner self)" do
+        assert_not_equal $outer_context.object_id, $inner_context.object_id
+      end
+
+    end
+  end
 end
