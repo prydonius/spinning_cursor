@@ -1,5 +1,4 @@
 require 'helper'
-require 'curses'
 
 class TestSpinningCursorCursor < Test::Unit::TestCase
   context "SpinningCursor::ConsoleHelpers.reset_line" do
