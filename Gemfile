@@ -5,6 +5,9 @@ source "http://rubygems.org"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
+
+gem "highline", "~> 1.6.19"
+
 group :development do
   gem "bundler", "~> 1.3.5"
   gem "jeweler", "~> 1.8.4"

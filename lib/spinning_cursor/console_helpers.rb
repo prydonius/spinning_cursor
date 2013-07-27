@@ -1,5 +1,5 @@
 require 'stringio'
-require 'curses'
+require 'highline/system_extensions'
 
 $console = STDOUT
 
@@ -8,7 +8,7 @@ module SpinningCursor
     if RUBY_PLATFORM =~ /(win|w)32$/
       # DOS
       # Contains a string to clear the line in the shell
-      CLR = "                                                               \r"
+      CLR = "#{(2..HighLine::SystemExtensions.terminal_size[0]).map{' '}.join}\r"
     else
       # Unix
       # Contains a string to clear the line in the shell
@@ -117,11 +117,7 @@ module SpinningCursor
     # Returns the width of the terminal window
     #
     def console_columns
-      Curses.init_screen
-      cols = Curses.cols
-      Curses.close_screen
-
-      cols
+      HighLine::SystemExtensions.terminal_size.first
     end
   end
 end
