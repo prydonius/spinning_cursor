@@ -102,6 +102,11 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
 
         spinner.join
 
+        $cycle_times.each_cons(2) do |t1, t2|
+          interval = t2-t1
+          assert (interval > delay and interval < (1.5 * delay))
+        end
+
         # slight delay to get things started
         sleep (delay/3.0)
         buffer =  (ESC_R_AND_CLR + "|")
