@@ -84,7 +84,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
   context "spinner" do
     setup do
       parsed = Parser.new { type :spinner; delay 0.2; banner ""}
-      delay = parsed.delay
+      @delay = parsed.delay
       $cycle_steps = []
       $cycle_times = []
       capture_stdout do |out|
@@ -107,7 +107,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
 
       $cycle_times.each_cons(2) do |t1, t2|
         interval = t2-t1
-        assert (interval > delay and interval < (1.5 * delay))
+        assert (interval > @delay and interval < (1.5 * @delay))
       end
 
       assert_equal ["|", "/", "-", "\\", "|"], $cycle_steps
