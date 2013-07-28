@@ -107,6 +107,8 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
           assert (interval > delay and interval < (1.5 * delay))
         end
 
+        assert_equal ["|", "/", "-", "\\", "|"], $cycle_steps
+
         # slight delay to get things started
         sleep (delay/3.0)
         buffer =  (ESC_R_AND_CLR + "|")
