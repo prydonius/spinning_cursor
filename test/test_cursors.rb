@@ -103,13 +103,14 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
       end
     end
 
-    should "cycle through correctly" do
-
+    should "change 'frames' with correct delay" do
       $cycle_times.each_cons(2) do |t1, t2|
         interval = t2-t1
         assert (interval > @delay and interval < (1.5 * @delay))
       end
+    end
 
+    should "cycle through correctly" do
       assert_equal ["|", "/", "-", "\\", "|"], $cycle_steps
     end
 
