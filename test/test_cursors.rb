@@ -113,25 +113,5 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
     should "cycle through correctly" do
       assert_equal ["|", "/", "-", "\\", "|"], $cycle_steps
     end
-
-    should "changes 'frames' with correct delay" do
-      parsed = Parser.new { type :spinner; delay 0.2; banner ""}
-      delay = parsed.delay
-      capture_stdout do |out|
-        spinner = Thread.new do
-          SpinningCursor::Cursor.new(parsed).spin
-        end
-        sleep (delay/4.0)
-        buffer = (ESC_R_AND_CLR + "|")
-        assert_equal buffer, out.string
-        buffer += (ESC_R_AND_CLR + "/")
-        sleep delay
-        # next frame after 'delay' second
-        assert_equal buffer, out.string
-        # don't need to go through the whole thing, otherwise test will take
-        # too long
-        spinner.kill
-      end
-    end
   end
 end
