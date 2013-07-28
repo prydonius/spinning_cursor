@@ -51,33 +51,36 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
   end
 
   context "dots" do
-    parsed = Parser.new { type :dots; delay 0.2; banner ""}
-    delay = parsed.delay
-    should "change 'frames' with correct delay" do
+    setup do
+      parsed = Parser.new { type :dots; delay 0.2; banner ""}
+      @delay = parsed.delay
+      $cycle_steps = []
+      $cycle_times = []
       capture_stdout do |out|
-        dots = Thread.new do
-          SpinningCursor::Cursor.new(parsed).spin
+        spinner = Thread.new do
+          test_cursor = SpinningCursor::Cursor.new(parsed)
+          class << test_cursor
+            def reset_line(str)
+              $cycle_steps.push str
+              $cycle_times.push Time.now
+              Thread.current.kill if $cycle_times.size == 5
+            end
+          end
+          test_cursor.spin
         end
-        # slight delay to get things started
-        sleep (delay/4.0)
-        buffer = "#{ESC_R_AND_CLR}" << "."
-        assert_equal buffer, out.string
-
-        sleep delay
-        buffer << "#{ESC_R_AND_CLR}" << ".."
-        assert_equal buffer, out.string
-
-        sleep delay
-        buffer << "#{ESC_R_AND_CLR}" << "..."
-        assert_equal buffer, out.string
-
-        sleep delay
-        buffer << "#{ESC_R_AND_CLR}"
-        assert_equal buffer, out.string
-        # don't need to go through the whole thing, otherwise test will take
-        # too long
-        dots.kill
+        spinner.join
       end
+    end
+
+    should "change 'frames' with correct delay" do
+      $cycle_times.each_cons(2) do |t1, t2|
+        interval = t2-t1
+        assert (interval > @delay and interval < (1.5 * @delay))
+      end
+    end
+
+    should "cycle through correctly" do
+      assert_equal [".", "..", "...", "", "."], $cycle_steps
     end
   end
 
