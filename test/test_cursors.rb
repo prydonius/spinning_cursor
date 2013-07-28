@@ -109,23 +109,6 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
 
         assert_equal ["|", "/", "-", "\\", "|"], $cycle_steps
 
-        # slight delay to get things started
-        sleep (delay/3.0)
-        buffer =  (ESC_R_AND_CLR + "|")
-        assert_equal buffer, out.string
-        buffer += (ESC_R_AND_CLR + "/")
-        sleep delay
-        assert_equal buffer, out.string
-        buffer += (ESC_R_AND_CLR + "-")
-        sleep delay
-        assert_equal buffer, out.string
-        buffer += (ESC_R_AND_CLR + "\\")
-        sleep delay
-        assert_equal buffer, out.string
-        sleep delay
-        buffer += (ESC_R_AND_CLR + "|")
-        assert_equal buffer, out.string
-        spinner.kill
       end
     end
 
