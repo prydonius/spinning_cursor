@@ -82,6 +82,9 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
   end
 
   context "spinner" do
+    setup do
+    end
+
     should "cycle through correctly" do
       parsed = Parser.new { type :spinner; delay 0.2; banner ""}
       delay = parsed.delay
