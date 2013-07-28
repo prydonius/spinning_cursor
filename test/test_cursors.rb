@@ -94,6 +94,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
             def reset_line(str)
               $cycle_steps.push str
               $cycle_times.push Time.now
+              Thread.current.kill if $cycle_times.size == 5
             end
           end
           test_cursor.spin
