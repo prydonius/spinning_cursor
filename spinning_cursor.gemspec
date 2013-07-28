@@ -5,20 +5,20 @@
 
 Gem::Specification.new do |s|
   s.name = "spinning_cursor"
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Adnan Abdulhussein"]
-  s.date = "2013-07-13"
+  s.date = "2013-07-28"
   s.description = "Spinning Cursor is a flexible DSL that allows you to easily produce a customizable waiting/loading message for your Ruby command line program. Beautifully keep your users informed with what your program is doing when a more complex solution, such as a progress bar, doesn't fit your needs."
   s.email = "adnan@prydoni.us"
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.md",
-    "TODO"
+    "README.md"
   ]
   s.files = [
     ".document",
+    ".travis.yml",
     ".yardopts",
     "CHANGELOG",
     "Gemfile",
@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
     "LICENSE.txt",
     "README.md",
     "Rakefile",
-    "TODO",
+    "Rakefile.ci",
     "VERSION",
     "lib/spinning_cursor.rb",
     "lib/spinning_cursor/console_helpers.rb",
@@ -50,14 +50,14 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<shoulda>, [">= 0"])
+      s.add_runtime_dependency(%q<highline>, ["~> 1.6.19"])
       s.add_development_dependency(%q<bundler>, ["~> 1.3.5"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.4"])
       s.add_development_dependency(%q<yard>, ["~> 0.8.6.2"])
       s.add_development_dependency(%q<redcarpet>, [">= 0"])
       s.add_development_dependency(%q<github-markup>, [">= 0"])
     else
-      s.add_dependency(%q<shoulda>, [">= 0"])
+      s.add_dependency(%q<highline>, ["~> 1.6.19"])
       s.add_dependency(%q<bundler>, ["~> 1.3.5"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
       s.add_dependency(%q<yard>, ["~> 0.8.6.2"])
@@ -65,7 +65,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<github-markup>, [">= 0"])
     end
   else
-    s.add_dependency(%q<shoulda>, [">= 0"])
+    s.add_dependency(%q<highline>, ["~> 1.6.19"])
     s.add_dependency(%q<bundler>, ["~> 1.3.5"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
     s.add_dependency(%q<yard>, ["~> 0.8.6.2"])
