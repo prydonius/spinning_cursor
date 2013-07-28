@@ -85,10 +85,20 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
     should "cycle through correctly" do
       parsed = Parser.new { type :spinner; delay 0.2; banner ""}
       delay = parsed.delay
+      $cycle_steps = []
+      $cycle_times = []
       capture_stdout do |out|
         spinner = Thread.new do
-          SpinningCursor::Cursor.new(parsed).spin
+          test_cursor = SpinningCursor::Cursor.new(parsed)
+          class << test_cursor
+            def reset_line(str)
+              $cycle_steps.push str
+              $cycle_times.push Time.now
+            end
+          end
+          test_cursor.spin
         end
+
         # slight delay to get things started
         sleep (delay/3.0)
         buffer =  (ESC_R_AND_CLR + "|")
