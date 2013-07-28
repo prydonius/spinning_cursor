@@ -100,6 +100,8 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
           test_cursor.spin
         end
 
+        spinner.join
+
         # slight delay to get things started
         sleep (delay/3.0)
         buffer =  (ESC_R_AND_CLR + "|")
