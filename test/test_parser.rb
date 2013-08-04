@@ -117,4 +117,50 @@ class TestSpinningCursorParser < Test::Unit::TestCase
 
     end
   end
+
+  context "SpinningCursor::Parser method" do
+    context "'type'" do
+      should "raise ArgumentError if argument IS NOT a SpinningCursor::Cursor instance_method" do
+        assert_raise(ArgumentError) { SpinningCursor::Parser.new.type :fake_method }
+      end
+      should "NOT raise anything if argument IS a SpinningCursor::Cursor instance_method" do
+        assert_nothing_raised { SpinningCursor::Parser.new.type :dots }
+      end
+    end
+    context "'delay'" do
+      should "raise ArgumentError if argument IS NOT a Numeric" do
+        assert_raise(ArgumentError) { SpinningCursor::Parser.new.delay "Not a number" }
+      end
+      should "NOT raise anything if argument IS a Numeric" do
+        assert_nothing_raised { SpinningCursor::Parser.new.delay 10 }
+      end
+    end
+    context "'output'" do
+      should "raise ArgumentError if argument IS NOT :inline or :at_stop" do
+        assert_raise(ArgumentError) { SpinningCursor::Parser.new.output :not_inline_nor_at_stop }
+      end
+      should "NOT raise anything if argument IS :inline or :at_stop" do
+        assert_nothing_raised { SpinningCursor::Parser.new.output :inline }
+        assert_nothing_raised { SpinningCursor::Parser.new.output :at_stop }
+      end
+    end
+    context "'banner' and 'message'" do
+      class LackingToSClass
+        undef :to_s
+      end
+
+      should "raise ArgumentError if argument IS NOT a String nor respond_to :to_s (:banner)" do
+        assert_raise(ArgumentError) { SpinningCursor::Parser.new.banner LackingToSClass.new }
+      end
+      should "raise ArgumentError if argument IS NOT a String nor respond_to :to_s (:message)" do
+        assert_raise(ArgumentError) { SpinningCursor::Parser.new.message LackingToSClass.new }
+      end
+      should "NOT raise anything if argument IS a String or respond_to :to_s (:banner)" do
+        assert_nothing_raised { SpinningCursor::Parser.new.banner "A String" }
+      end
+      should "NOT raise anything if argument IS a String or respond_to :to_s (:message)" do
+        assert_nothing_raised { SpinningCursor::Parser.new.message "A String" }
+      end
+    end
+  end
 end
