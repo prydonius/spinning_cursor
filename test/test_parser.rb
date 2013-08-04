@@ -135,5 +135,14 @@ class TestSpinningCursorParser < Test::Unit::TestCase
         assert_nothing_raised { SpinningCursor::Parser.new.delay 10 }
       end
     end
+    context "'output'" do
+      should "raise ArgumentError if argument IS NOT :inline or :at_stop" do
+        assert_raise(ArgumentError) { SpinningCursor::Parser.new.output :not_inline_nor_at_stop }
+      end
+      should "NOT raise anything if argument IS :inline or :at_stop" do
+        assert_nothing_raised { SpinningCursor::Parser.new.output :inline }
+        assert_nothing_raised { SpinningCursor::Parser.new.output :at_stop }
+      end
+    end
   end
 end
