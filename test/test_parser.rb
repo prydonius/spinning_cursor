@@ -127,5 +127,13 @@ class TestSpinningCursorParser < Test::Unit::TestCase
         assert_nothing_raised { SpinningCursor::Parser.new.type :dots }
       end
     end
+    context "'delay'" do
+      should "raise ArgumentError if argument IS NOT a Numeric" do
+        assert_raise(ArgumentError) { SpinningCursor::Parser.new.delay "Not a number" }
+      end
+      should "NOT raise anything if argument IS a Numeric" do
+        assert_nothing_raised { SpinningCursor::Parser.new.delay 10 }
+      end
+    end
   end
 end
