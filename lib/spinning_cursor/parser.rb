@@ -50,7 +50,7 @@ module SpinningCursor
         inst_methods = SpinningCursor::Cursor.public_instance_methods |
                        SpinningCursor::Cursor.private_instance_methods |
                        SpinningCursor::Cursor.protected_instance_methods
-        inst_methods.include?(arg) ? arg : false },
+        (inst_methods & [ arg, arg.to_s ]).empty? ? false : arg },
       :delay   => Proc.new { |arg| arg.is_a?(Numeric) ? arg.to_f : false},
       :output  => Proc.new { |arg| [:inline, :at_stop].include?(arg) ? arg : false},
       :banner  => Proc.new { |arg| arg.respond_to?(:to_s) ? arg.to_s : false},
