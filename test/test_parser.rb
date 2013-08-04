@@ -144,5 +144,23 @@ class TestSpinningCursorParser < Test::Unit::TestCase
         assert_nothing_raised { SpinningCursor::Parser.new.output :at_stop }
       end
     end
+    context "'banner' and 'message'" do
+      class LackingToSClass
+        undef :to_s
+      end
+
+      should "raise ArgumentError if argument IS NOT a String nor respond_to :to_s (:banner)" do
+        assert_raise(ArgumentError) { SpinningCursor::Parser.new.banner LackingToSClass.new }
+      end
+      should "raise ArgumentError if argument IS NOT a String nor respond_to :to_s (:message)" do
+        assert_raise(ArgumentError) { SpinningCursor::Parser.new.message LackingToSClass.new }
+      end
+      should "NOT raise anything if argument IS a String or respond_to :to_s (:banner)" do
+        assert_nothing_raised { SpinningCursor::Parser.new.banner "A String" }
+      end
+      should "NOT raise anything if argument IS a String or respond_to :to_s (:message)" do
+        assert_nothing_raised { SpinningCursor::Parser.new.message "A String" }
+      end
+    end
   end
 end
