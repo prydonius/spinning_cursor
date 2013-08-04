@@ -117,4 +117,15 @@ class TestSpinningCursorParser < Test::Unit::TestCase
 
     end
   end
+
+  context "SpinningCursor::Parser method" do
+    context "'type'" do
+      should "raise ArgumentError if argument IS NOT a SpinningCursor::Cursor instance_method" do
+        assert_raise(ArgumentError) { SpinningCursor::Parser.new.type :fake_method }
+      end
+      should "NOT raise anything if argument IS a SpinningCursor::Cursor instance_method" do
+        assert_nothing_raised { SpinningCursor::Parser.new.type :dots }
+      end
+    end
+  end
 end
