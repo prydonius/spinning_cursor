@@ -8,7 +8,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
     should "not clear lines above if it fits within the width of the shell" do
       # general case
       capture_stdout do |out|
-        SpinningCursor.start do
+        SpinningCursor.run do
           banner (1..cols-20).map { ('a'..'z').to_a[rand(26)] }.join
           action { sleep 0.1 }
         end
@@ -18,7 +18,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
 
     should "not clear lines above if it fits exactly on the line (edge case)" do
       capture_stdout do |out|
-        SpinningCursor.start do
+        SpinningCursor.run do
           # spinner type takes up two characters, so minus 2 to fit exactly
           banner (1..cols-2).map { ('a'..'z').to_a[rand(26)] }.join
           action { sleep 0.1 }
@@ -29,7 +29,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
 
     should "clear lines above if banner message overflows" do
       capture_stdout do |out|
-        SpinningCursor.start do
+        SpinningCursor.run do
           # spinner type takes up two characters, so minus 2 to fit exactly
           banner (1..400).map { ('a'..'z').to_a[rand(26)] }.join
           action { sleep 0.1 }
@@ -40,7 +40,7 @@ class TestSpinningCursorCursor < Test::Unit::TestCase
 
     should "clear lines above if banner message overflows (edge case)" do
       capture_stdout do |out|
-        SpinningCursor.start do
+        SpinningCursor.run do
           # spinner type takes up two characters, so minus 2 to fit exactly
           banner (1..cols-1).map { ('a'..'z').to_a[rand(26)] }.join
           action { sleep 0.1 }

@@ -47,6 +47,8 @@ module SpinningCursor
     end
   end
 
+  alias run start
+
   #
   # Kills the cursor thread and prints the finished message
   # Returns execution time
