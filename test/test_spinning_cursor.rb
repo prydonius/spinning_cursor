@@ -196,4 +196,43 @@ class TestSpinningCursor < Test::Unit::TestCase
     end
   end
 
+  context "SpinningCursor#setup" do
+    setup do
+      @sc = SpinningCursor.setup do
+        banner "My Setup Banner"
+        type :dots
+        message "My Setup Message"
+        delay 0.73
+        @bl = Proc.new {}
+        action(&@bl)
+        output :at_stop
+      end
+      @parsed = @sc.instance_variable_get(:@parsed)
+    end
+
+    should "parse banner correctly" do
+      assert_equal "My Setup Banner", @parsed.banner
+    end
+
+    should "parse type correctly" do
+      assert_equal :dots, @parsed.type
+    end
+
+    should "parse message correctly" do
+      assert_equal "My Setup Message", @parsed.message
+    end
+
+    should "parse delay correctly" do
+      assert_equal 0.73, @parsed.delay
+    end
+
+    should "parse action correctly" do
+      assert_equal @parsed.instance_variable_get(:@bl), @parsed.action
+    end
+
+    should "parse output correctly" do
+      assert_equal :at_stop, @parsed.output
+    end
+  end
+
 end
