@@ -44,11 +44,30 @@ module SpinningCursor
     #   For setting, use method with arguments
     #   e.g. `banner "my banner"`
     #
-    %w[banner type message delay output].each do |method|
+
+    methods_and_validations = {
+      :type    => Proc.new { |arg|
+        inst_methods = SpinningCursor::Cursor.public_instance_methods |
+                       SpinningCursor::Cursor.private_instance_methods |
+                       SpinningCursor::Cursor.protected_instance_methods
+        (inst_methods & [ arg, arg.to_s ]).empty? ? false : arg },
+      :delay   => Proc.new { |arg| arg.is_a?(Numeric) ? arg.to_f : false},
+      :output  => Proc.new { |arg| [:inline, :at_stop].include?(arg) ? arg : false},
+      :banner  => Proc.new { |arg| arg.respond_to?(:to_s) ? arg.to_s : false},
+      :message => Proc.new { |arg| arg.respond_to?(:to_s) ? arg.to_s : false},
+    }
+
+    methods_and_validations.each do |method, validation|
       define_method(method) do |*args|
         var = "@#{method}"
-        return instance_variable_get(var) unless args.first
-        instance_variable_set(var, args.first)
+        arg = args.first
+        if arg
+          valid_arg = validation.call(arg)
+          raise ArgumentError unless valid_arg
+          instance_variable_set(var, valid_arg)
+        else
+          instance_variable_get(var)
+        end
       end
     end
 
