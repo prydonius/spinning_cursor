@@ -8,20 +8,30 @@ module SpinningCursor
   include self::ConsoleHelpers
   extend  self::ConsoleHelpers
 
+  def setup(&block)
+    @parsed = Parser.new(&block)
+    @cursor = Cursor.new(@parsed)
+    @setup = true
+    self
+  end
+
+  def setup?
+    @setup
+  end
+
   #
   # Sends passed block to Parser, and starts cursor thread
   # It will execute the action block and kill the cursor
   # thread if an action block is passed.
   #
   def start(&block)
+    setup(&block) if block or not setup?
     stop if alive?
 
     save_stdout_sync_status
     capture_console
     hide_cursor
 
-    @parsed = Parser.new(&block)
-    @cursor = Cursor.new(@parsed)
     @spinner = Thread.new do
       abort_on_exception = true
       @cursor.spin
@@ -46,6 +56,8 @@ module SpinningCursor
       @stop_watch.start
     end
   end
+
+  alias run start
 
   #
   # Kills the cursor thread and prints the finished message
@@ -72,6 +84,7 @@ module SpinningCursor
       # Set parsed to nil so set_message method only works
       # when cursor is actually running.
       @parsed = nil
+      @setup = false
 
       # Return execution time
       @stop_watch.stop

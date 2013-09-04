@@ -29,7 +29,7 @@ _It's so simple it hurts!_
 ```ruby
 require 'spinning_cursor' # you'll definitely need this bit
 
-SpinningCursor.start do
+SpinningCursor.run do
   banner "An amazing task is happening"
   type :spinner
   action do
@@ -76,7 +76,7 @@ The first option is the simplest, but the second isn't so bad either.
 It's pretty simple, just do:
 
 ```ruby
-SpinningCursor.start do
+SpinningCursor.run do
   banner "Loading"
   type :dots
   message "Done"
@@ -88,7 +88,7 @@ sleep 20
 SpinningCursor.stop
 ```
 
-**Notice** the absence of the `action` option. The start method will only keep
+**Notice** the absence of the `action` option. The run method will only keep
 the cursor running if an `action` block isn't passed to it.
 
 ### I want to be able to change the finish message conditionally!
@@ -98,7 +98,7 @@ Do you? Well that's easy too (I'm starting to see a pattern here...)!
 Use the `set_message` method to change the message during the execution:
 
 ```ruby
-SpinningCursor.start do
+SpinningCursor.run do
   banner "Calculating your favour colour, please wait"
   type :dots
   action do
@@ -123,7 +123,7 @@ the banner message in the same way you would the finish message, using
 `set_banner`:
 
 ```ruby
-SpinningCursor.start do
+SpinningCursor.run do
   banner "Stealing your food"
   action do
     sleep 10

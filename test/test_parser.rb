@@ -76,12 +76,12 @@ class TestSpinningCursorParser < Test::Unit::TestCase
     end
   end
 
-  context "SpinningCursor#start" do
+  context "SpinningCursor#run" do
     context "with a block with 1 parameter (arity 1)" do
       setup do
         $outer_context = self
         capture_stdout do |out|
-          SpinningCursor.start do |param|
+          SpinningCursor.run do |param|
             $inner_context = self
             $yielded_param = param
           end
@@ -101,7 +101,7 @@ class TestSpinningCursorParser < Test::Unit::TestCase
       setup do
         $outer_context = self
         capture_stdout do |out|
-          SpinningCursor.start do
+          SpinningCursor.run do
             $inner_context = self
           end
         end
