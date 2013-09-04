@@ -5,7 +5,7 @@ class TestSpinningCursor < Test::Unit::TestCase
     should "start the cursor, run block content and kill the cursor" do
       # Hide any output
       capture_stdout do |out|
-        SpinningCursor.start do
+        SpinningCursor.run do
           action { sleep 0.1 }
         end
         # Give it some time to abort
@@ -15,7 +15,7 @@ class TestSpinningCursor < Test::Unit::TestCase
 
     should "Parser#outer_scope_object point to 'caller'" do
       capture_stdout do |out|
-        SpinningCursor.start { }
+        SpinningCursor.run { }
         parsed = SpinningCursor.instance_variable_get(:@parsed)
         assert_equal self, parsed.outer_scope_object
         SpinningCursor.stop
@@ -25,7 +25,7 @@ class TestSpinningCursor < Test::Unit::TestCase
     should "evalute the block from the calling class" do
       @num = 1
       capture_stdout do |out|
-        SpinningCursor.start do
+        SpinningCursor.run do
           action { @num += 1 }
         end
 
@@ -37,7 +37,7 @@ class TestSpinningCursor < Test::Unit::TestCase
       class SomethingWrongHappened < StandardError; end
       assert_raise SomethingWrongHappened do
         capture_stdout do |out|
-          SpinningCursor.start do
+          SpinningCursor.run do
             action { raise SomethingWrongHappened }
           end
         end
@@ -48,7 +48,7 @@ class TestSpinningCursor < Test::Unit::TestCase
   context "when an action block isn't passed it" do
     should "start the cursor, and keep it going until stop is called" do
       capture_stdout do |out|
-        SpinningCursor.start do
+        SpinningCursor.run do
           banner "no action block"
         end
         sleep 0.5
@@ -63,7 +63,7 @@ class TestSpinningCursor < Test::Unit::TestCase
   context "whilst running it" do
     should "allow you to change the end message" do
       capture_stdout do |out|
-        SpinningCursor.start do
+        SpinningCursor.run do
           action do
             SpinningCursor.set_message "Failed!"
           end
@@ -77,7 +77,7 @@ class TestSpinningCursor < Test::Unit::TestCase
     should "stop and display error if an unmanaged exception is thrown" do
       capture_stdout do |out|
         begin
-          SpinningCursor.start do
+          SpinningCursor.run do
             action do
               raise "An exception!"
             end
@@ -90,7 +90,7 @@ class TestSpinningCursor < Test::Unit::TestCase
 
     should "not stop if an exception is handled" do
       capture_stdout do |out|
-        SpinningCursor.start do
+        SpinningCursor.run do
           action do
             begin
               raise "An exception!"
@@ -106,7 +106,7 @@ class TestSpinningCursor < Test::Unit::TestCase
 
     should "allow you to change the banner" do
       capture_stdout do |out|
-        SpinningCursor.start do
+        SpinningCursor.run do
           delay 0.2
           action do
             # Have to give it time to print the banners
@@ -142,7 +142,7 @@ class TestSpinningCursor < Test::Unit::TestCase
     should "(with a block) return similar timing values" do
       capture_stdout do |out|
         result =
-        SpinningCursor.start do
+        SpinningCursor.run do
           action do
             sleep 0.2
           end
@@ -150,7 +150,7 @@ class TestSpinningCursor < Test::Unit::TestCase
         timing_1 = result[:elapsed_time]
 
         result =
-        SpinningCursor.start do
+        SpinningCursor.run do
           action do
             sleep 0.2
           end
@@ -163,13 +163,13 @@ class TestSpinningCursor < Test::Unit::TestCase
     end
   end
 
-  context "SpinningCursor#start" do
+  context "SpinningCursor#run" do
 
     context "with a block with 1 parameter (arity 1)" do
       setup do
         @my_inst = "outer_inst"
         capture_stdout do |out|
-          SpinningCursor.start do |param|
+          SpinningCursor.run do |param|
             @my_inst = "inner_inst"
           end
         end
@@ -184,7 +184,7 @@ class TestSpinningCursor < Test::Unit::TestCase
       setup do
         @my_inst = "outer_inst"
         capture_stdout do |out|
-          SpinningCursor.start do
+          SpinningCursor.run do
             @my_inst = "inner_inst"
           end
         end
@@ -193,6 +193,45 @@ class TestSpinningCursor < Test::Unit::TestCase
       should "outer instance variables NOT be available inside" do
         assert_equal "outer_inst", @my_inst
       end
+    end
+  end
+
+  context "SpinningCursor#setup" do
+    setup do
+      @sc = SpinningCursor.setup do
+        banner "My Setup Banner"
+        type :dots
+        message "My Setup Message"
+        delay 0.73
+        @bl = Proc.new {}
+        action(&@bl)
+        output :at_stop
+      end
+      @parsed = @sc.instance_variable_get(:@parsed)
+    end
+
+    should "parse banner correctly" do
+      assert_equal "My Setup Banner", @parsed.banner
+    end
+
+    should "parse type correctly" do
+      assert_equal :dots, @parsed.type
+    end
+
+    should "parse message correctly" do
+      assert_equal "My Setup Message", @parsed.message
+    end
+
+    should "parse delay correctly" do
+      assert_equal 0.73, @parsed.delay
+    end
+
+    should "parse action correctly" do
+      assert_equal @parsed.instance_variable_get(:@bl), @parsed.action
+    end
+
+    should "parse output correctly" do
+      assert_equal :at_stop, @parsed.output
     end
   end
 
