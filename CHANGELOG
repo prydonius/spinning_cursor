@@ -1,6 +1,9 @@
 CHANGELOG
 ===============================================================================
 
+v0.2.2 (2013-10-22)
+  - Added an alias to start the cursor
+
 v0.2.1 (2013-07-28)
   - Fix banner overflowing issue #19
   - Ensure cross-platform support #22 #23
