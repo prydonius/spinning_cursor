@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "spinning_cursor"
-  s.version = "0.2.1"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Adnan Abdulhussein"]
-  s.date = "2013-07-28"
+  s.date = "2013-10-28"
   s.description = "Spinning Cursor is a flexible DSL that allows you to easily produce a customizable waiting/loading message for your Ruby command line program. Beautifully keep your users informed with what your program is doing when a more complex solution, such as a progress bar, doesn't fit your needs."
   s.email = "adnan@prydoni.us"
   s.extra_rdoc_files = [
@@ -43,11 +43,11 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/Prydonius/spinning_cursor"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.23"
+  s.rubygems_version = "2.0.3"
   s.summary = "A DSL for adding animated loaders to your Ruby command line application."
 
   if s.respond_to? :specification_version then
-    s.specification_version = 3
+    s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<highline>, ["~> 1.6.19"])
