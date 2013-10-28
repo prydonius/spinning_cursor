@@ -1,6 +1,10 @@
 CHANGELOG
 ===============================================================================
 
+v0.3.0 (2013-10-28)
+  - API changes (SpinningCursor#setup method and SpinningCursor#start renamed to SpinningCursor#run) #29
+  - Type validation of options - throws exception if validation fails #28
+
 v0.2.1 (2013-07-28)
   - Fix banner overflowing issue #19
   - Ensure cross-platform support #22 #23
